@@ -46,8 +46,8 @@
 // Configuration bits: selected in the GUI
 
 // CONFIG1H
-#pragma config FOSC = HSHP    // Oscillator Selection bits->HS oscillator (high power > 16 MHz)
-#pragma config PLLCFG = ON    // 4X PLL Enable->Oscillator multiplied by 4
+#pragma config FOSC = INTIO67    // Oscillator Selection bits->Internal oscillator block
+#pragma config PLLCFG = OFF    // 4X PLL Enable->Oscillator used directly
 #pragma config PRICLKEN = ON    // Primary clock enable bit->Primary clock enabled
 #pragma config FCMEN = OFF    // Fail-Safe Clock Monitor Enable bit->Fail-Safe Clock Monitor disabled
 #pragma config IESO = OFF    // Internal/External Oscillator Switchover bit->Oscillator Switchover mode disabled
@@ -114,8 +114,8 @@ void SYSTEM_Initialize(void)
     INTERRUPT_Initialize();
     PIN_MANAGER_Initialize();
     OSCILLATOR_Initialize();
-    TMR1_Initialize();
     EXT_INT_Initialize();
+    TMR1_Initialize();
     TMR0_Initialize();
     EUSART1_Initialize();
 }
@@ -126,8 +126,8 @@ void OSCILLATOR_Initialize(void)
     OSCCON = 0x70;
     // PRISD enabled; SOSCGO disabled; MFIOSEL disabled; 
     OSCCON2 = 0x04;
-    // INTSRC disabled; PLLEN disabled; TUN 0; 
-    OSCTUNE = 0x00;
+    // INTSRC disabled; PLLEN enabled; TUN 0; 
+    OSCTUNE = 0x40;
     // Wait for PLL to stabilize
     while(PLLRDY == 0)
     {

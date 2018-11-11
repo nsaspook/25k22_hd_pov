@@ -51,6 +51,7 @@
 #include <xc.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
 #ifdef __cplusplus  // Provide C++ Compatibility
 
@@ -141,26 +142,6 @@ uint8_t EUSART1_Read(void);
 */
 void EUSART1_Write(uint8_t txData);
 
-/**
-  @Summary
-    Maintains the driver's transmitter state machine and implements its ISR.
-
-  @Description
-    This routine is used to maintain the driver's internal transmitter state
-    machine.This interrupt service routine is called when the state of the
-    transmitter needs to be maintained in a non polled manner.
-
-  @Preconditions
-    EUSART1_Initialize() function should have been called
-    for the ISR to execute correctly.
-
-  @Param
-    None
-
-  @Returns
-    None
-*/
-void EUSART1_Transmit_ISR(void);
 
 /**
   @Summary

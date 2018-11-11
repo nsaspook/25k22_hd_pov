@@ -13,7 +13,7 @@
   @Description:
     This header file provides implementations for pin APIs for all pins selected in the GUI.
     Generation Information :
-        Product Revision  :  MPLAB(c) Code Configurator - 4.35
+        Product Revision  :  MPLAB(c) Code Configurator - 4.35.8
         Device            :  PIC18F25K22
         Version           :  1.01
     The generated drivers are tested against the following:
@@ -70,16 +70,6 @@
 #define RB0_ResetPullup()   do { WPUBbits.WPUB0 = 0; } while(0)
 #define RB0_SetAnalogMode() do { ANSELBbits.ANSB0 = 1; } while(0)
 #define RB0_SetDigitalMode()do { ANSELBbits.ANSB0 = 0; } while(0)
-
-// get/set RC6 procedures
-#define RC6_SetHigh()    do { LATCbits.LATC6 = 1; } while(0)
-#define RC6_SetLow()   do { LATCbits.LATC6 = 0; } while(0)
-#define RC6_Toggle()   do { LATCbits.LATC6 = ~LATCbits.LATC6; } while(0)
-#define RC6_GetValue()         PORTCbits.RC6
-#define RC6_SetDigitalInput()   do { TRISCbits.TRISC6 = 1; } while(0)
-#define RC6_SetDigitalOutput()  do { TRISCbits.TRISC6 = 0; } while(0)
-#define RC6_SetAnalogMode() do { ANSELCbits.ANSC6 = 1; } while(0)
-#define RC6_SetDigitalMode()do { ANSELCbits.ANSC6 = 0; } while(0)
 
 // get/set RC7 procedures
 #define RC7_SetHigh()    do { LATCbits.LATC7 = 1; } while(0)

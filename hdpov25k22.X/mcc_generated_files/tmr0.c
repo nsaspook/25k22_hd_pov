@@ -70,8 +70,8 @@ void TMR0_Initialize(void)
     // TMR0H 255; 
     TMR0H = 0xFF;
 
-    // TMR0L 155; 
-    TMR0L = 0x9B;
+    // TMR0L 193; 
+    TMR0L = 0xC1;
 
 	
     // Load TMR0 value to the 16-bit reload variable

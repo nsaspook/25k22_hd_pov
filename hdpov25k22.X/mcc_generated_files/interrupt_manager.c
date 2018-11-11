@@ -60,18 +60,12 @@ void  INTERRUPT_Initialize (void)
 
     // Interrupt INT0I has no priority bit. It will always be called from the High Interrupt Vector
 
-    // TXI - high priority
-    IPR1bits.TX1IP = 1;
-
     // RCI - high priority
     IPR1bits.RC1IP = 1;
 
     // TMRI - high priority
     IPR1bits.TMR1IP = 1;
 
-
-    // RBI - low priority
-    INTCON2bits.RBIP = 0;    
 
 }
 
@@ -86,10 +80,6 @@ void interrupt INTERRUPT_InterruptManagerHigh (void)
     {
         INT0_ISR();
     }
-    if(PIE1bits.TX1IE == 1 && PIR1bits.TX1IF == 1)
-    {
-        EUSART1_Transmit_ISR();
-    }
     if(PIE1bits.RC1IE == 1 && PIR1bits.RC1IF == 1)
     {
         EUSART1_Receive_ISR();
@@ -100,14 +90,6 @@ void interrupt INTERRUPT_InterruptManagerHigh (void)
     }
 }
 
-void interrupt low_priority INTERRUPT_InterruptManagerLow (void)
-{
-    // interrupt handler
-    if(INTCONbits.RBIE == 1 && INTCONbits.RBIF == 1)
-    {
-        PIN_MANAGER_IOC();
-    }
-}
 /**
  End of File
 */

@@ -13,7 +13,7 @@
   Description:
     This header file provides implementations for pin APIs for all pins selected in the GUI.
     Generation Information :
-        Product Revision  :  MPLAB(c) Code Configurator - 4.35
+        Product Revision  :  MPLAB(c) Code Configurator - 4.35.8
         Device            :  PIC18F25K22
         Driver Version    :  1.02
     The generated drivers are tested against the following:
@@ -55,22 +55,22 @@ void PIN_MANAGER_Initialize(void)
     LATx registers
     */   
     LATA = 0x00;    
-    LATB = 0x00;    
+    LATB = 0x01;    
     LATC = 0x00;    
 
     /**
     TRISx registers
     */    
-    TRISA = 0xFF;
+    TRISA = 0xC0;
     TRISB = 0xFF;
-    TRISC = 0xBF;
+    TRISC = 0xFF;
 
     /**
     ANSELx registers
     */   
-    ANSELC = 0x3C;
+    ANSELC = 0x7C;
     ANSELB = 0x3E;
-    ANSELA = 0x2F;
+    ANSELA = 0x00;
 
     /**
     WPUx registers
@@ -82,16 +82,11 @@ void PIN_MANAGER_Initialize(void)
 
 
    
-    // Enable RBI interrupt 
-    INTCONbits.RBIE = 1; 
     
 }       
 
 void PIN_MANAGER_IOC(void)
 {   
-    
-    // Clear global Interrupt-On-Change flag
-    INTCONbits.RBIF = 0;
 
 }
 
