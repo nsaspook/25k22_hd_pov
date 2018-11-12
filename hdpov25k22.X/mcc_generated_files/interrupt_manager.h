@@ -141,7 +141,7 @@ void INTERRUPT_Initialize (void);
  * @Example
     INTERRUPT_InterruptManager();
  */
-void interrupt INTERRUPT_InterruptManager (void);
+void __interrupt() INTERRUPT_InterruptManager (void);
 
 #endif  // INTERRUPT_MANAGER_H
 /**

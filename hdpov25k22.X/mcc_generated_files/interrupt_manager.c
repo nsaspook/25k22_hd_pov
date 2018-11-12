@@ -64,12 +64,15 @@ void  INTERRUPT_Initialize (void)
     IPR1bits.RC1IP = 1;
 
     // TMRI - high priority
+    IPR2bits.TMR3IP = 1;
+
+    // TMRI - high priority
     IPR1bits.TMR1IP = 1;
 
 
 }
 
-void interrupt INTERRUPT_InterruptManagerHigh (void)
+void __interrupt() INTERRUPT_InterruptManagerHigh (void)
 {
    // interrupt handler
     if(INTCONbits.TMR0IE == 1 && INTCONbits.TMR0IF == 1)
@@ -83,6 +86,10 @@ void interrupt INTERRUPT_InterruptManagerHigh (void)
     if(PIE1bits.RC1IE == 1 && PIR1bits.RC1IF == 1)
     {
         EUSART1_Receive_ISR();
+    }
+    if(PIE2bits.TMR3IE == 1 && PIR2bits.TMR3IF == 1)
+    {
+        TMR3_ISR();
     }
     if(PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1)
     {
