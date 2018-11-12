@@ -41,6 +41,7 @@
  */
 
 #include "mcc_generated_files/mcc.h"
+#include "pov_mon.h"
 
 /*
 			 Main application
@@ -67,8 +68,11 @@ void main(void)
 	// Disable the Peripheral Interrupts
 	//INTERRUPT_PeripheralInterruptDisable();
 
+	init_povmon();
+
 	while (1) {
 		// Add your application code
+		sw_work();
 	}
 }
 /**
