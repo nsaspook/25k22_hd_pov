@@ -66,19 +66,18 @@ typedef volatile struct L_data {
 #define RMSPORT_IOA	0b00010000		// SW1 input RA4
 #define RMSPORT_IOB	0b00010001		// Rs-232 transmit on B1, receive on B4, hall gear sensor on B0
 
-#define LED1		LATAbits.LATA3
-#define LED2		LATAbits.LATA3
-#define LED3		LATAbits.LATA3
-#define LED4		LATBbits.LATB6
-#define LED5		LATBbits.LATB7
-#define LED6		LATAbits.LATA6		
-#define COMM_ENABLE	LATBbits.LATB3
+#define LED1		LATCbits.LATC3
+#define LED2		LATCbits.LATC2
+#define LED3		LATCbits.LATC1
+#define LED4		LATCbits.LATC0
+#define LED5		LATAbits.LATA6
+#define LED6		LATAbits.LATA7		
 
 #define G_OUT		LATAbits.LATA0
 #define R_OUT		LATAbits.LATA1
 #define B_OUT		LATAbits.LATA2
-#define TACHIN		LATBbits.LATB0
-#define RPMLED		LATBbits.LATB5
+#define BLINKLED	PORTBbits.RB5
+#define RPMLED		LATCbits.LATC3
 #define SW1		PORTAbits.RA4
 
 #define PAT2		// display patterns

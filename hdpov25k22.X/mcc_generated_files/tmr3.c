@@ -49,6 +49,7 @@
 
 #include <xc.h>
 #include "tmr3.h"
+#include "../pov_mon.h"
 
 /**
   Section: Global Variable Definitions
@@ -186,7 +187,7 @@ void TMR3_DefaultInterruptHandler(void)
 {
 	// add your TMR3 interrupt custom code
 	// or set custom function using TMR3_SetInterruptHandler()
-	LATBbits.LATB5 = ~LATBbits.LATB5;
+	BLINKLED = ~BLINKLED;
 }
 
 
