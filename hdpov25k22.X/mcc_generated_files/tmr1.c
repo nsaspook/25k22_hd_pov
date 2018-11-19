@@ -195,7 +195,6 @@ void TMR1_DefaultInterruptHandler(void)
 		V.l_state = ISR_STATE_LINE; // off time after index to start time
 		break;
 	case ISR_STATE_LINE:
-		LED4 = 0;
 		WRITETIMER1(V.l_width);
 		if (!L_ptr->sequence.skip) {
 			if (L_ptr->sequence.R)

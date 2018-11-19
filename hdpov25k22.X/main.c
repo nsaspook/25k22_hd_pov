@@ -39,6 +39,9 @@
     MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE
     TERMS.
  */
+// XC8 bogus warnings from MCC code
+#pragma warning disable 520
+#pragma warning disable 1498 
 
 #include "mcc_generated_files/mcc.h"
 #include "pov_mon.h"

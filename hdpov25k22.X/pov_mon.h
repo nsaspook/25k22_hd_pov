@@ -34,7 +34,8 @@ typedef struct V_data { // control data structure with possible volatile issues
 	volatile uint8_t line_num : 2;
 	volatile uint8_t rx_data;
 	uint16_t l_size;
-	volatile uint16_t rotations, sequences;
+	volatile uint16_t rotations, sequences, rpm_counts;
+	volatile bool rpm_overflow;
 	volatile uint16_t l_full, l_width;
 	uint8_t str[24];
 } V_data;
@@ -98,6 +99,6 @@ typedef volatile struct L_data {
 #define strobe_adjust	11
 #define strobe_limit_l	10400 // this limit is the starting point for the calc'd value from the rs-232 port
 #define strobe_limit_h	65534
-#define strobe_line	64900 // line width timer count
+#define strobe_line	62400 // line width timer count
 #define strobe_max	16
 #endif 

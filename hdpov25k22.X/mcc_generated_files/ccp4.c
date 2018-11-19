@@ -1,24 +1,24 @@
 /**
-  @Generated PIC10 / PIC12 / PIC16 / PIC18 MCUs Header File
+  CCP4 Generated Driver File
 
-  @Company:
+  @Company
     Microchip Technology Inc.
 
-  @File Name:
-    mcc.h
+  @File Name
+    ccp4.c
 
-  @Summary:
-    This is the mcc.h file generated using PIC10 / PIC12 / PIC16 / PIC18 MCUs
+  @Summary
+    This is the generated driver implementation file for the CCP4 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
 
-  @Description:
-    This header file provides implementations for driver APIs for all modules selected in the GUI.
+  @Description
+    This source file provides implementations for driver APIs for CCP4.
     Generation Information :
         Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.65
         Device            :  PIC18F25K22
         Driver Version    :  2.00
     The generated drivers are tested against the following:
-        Compiler          :  XC8 1.45 or later
-        MPLAB             :  MPLAB X 4.10
+        Compiler          :  XC8 1.45
+         MPLAB 	          :  MPLAB X 4.10
 */
 
 /*
@@ -41,55 +41,57 @@
 
     MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE
     TERMS.
-*/ 
+*/
 
-#ifndef MCC_H
-#define	MCC_H
+/**
+  Section: Included Files
+*/
+
 #include <xc.h>
-#include "pin_manager.h"
-#include <stdint.h>
-#include <stdbool.h>
-#include "interrupt_manager.h"
-#include "tmr5.h"
-#include "tmr3.h"
-#include "tmr1.h"
-#include "tmr0.h"
 #include "ccp4.h"
-#include "ext_int.h"
-#include "eusart1.h"
-
-#define _XTAL_FREQ  64000000
-
 
 /**
- * @Param
-    none
- * @Returns
-    none
- * @Description
-    Initializes the device to the default states configured in the
- *                  MCC GUI
- * @Example
-    SYSTEM_Initialize(void);
- */
-void SYSTEM_Initialize(void);
+  Section: Capture Module APIs:
+*/
 
-/**
- * @Param
-    none
- * @Returns
-    none
- * @Description
-    Initializes the oscillator to the default states configured in the
- *                  MCC GUI
- * @Example
-    OSCILLATOR_Initialize(void);
- */
-void OSCILLATOR_Initialize(void);
+void CCP4_Initialize(void)
+{
+    // Set the CCP4 to the options selected in the User Interface
+	
+	// CCP4M Falling edge; DC4B 0; 
+	CCP4CON = 0x04;    
+	
+	// CCPR4L 0; 
+	CCPR4L = 0x00;    
+	
+	// CCPR4H 0; 
+	CCPR4H = 0x00;    
 
+	// Selecting Timer 5
+	CCPTMRS1bits.C4TSEL = 0x2;
+    
+}
 
+bool CCP4_IsCapturedDataReady(void)
+{
+    // Check if data is ready to read from capture module by reading "CCPIF" flag.
+    bool status = PIR4bits.CCP4IF;
+    if(status)
+        PIR4bits.CCP4IF = 0;
+    return (status);
+}
 
-#endif	/* MCC_H */
+uint16_t CCP4_CaptureRead(void)
+{
+    CCP_PERIOD_REG_T module;
+
+    // Copy captured value.
+    module.ccpr4l = CCPR4L;
+    module.ccpr4h = CCPR4H;
+    
+    // Return 16bit captured value
+    return module.ccpr4_16Bit;
+}
 /**
  End of File
 */

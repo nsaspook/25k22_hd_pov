@@ -26,6 +26,8 @@
  */
 #include <xc.h>
 #include "ext_int.h"
+#include "ccp4.h"
+#include "tmr5.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -61,14 +63,23 @@ void INT0_SetInterruptHandler(void (* InterruptHandler)(void))
 
 void INT0_DefaultInterruptHandler(void)
 {
+	LED1 = (uint8_t)!LED1;
 	LED2 = 1;
 	LED3 = 1;
 	LED4 = 1;
-	// add your INT0 interrupt custom code
-	// or set custom function using INT0_SetInterruptHandler()
+	if (PIR4bits.CCP4IF) {
+		LED5 = (uint8_t)!LED5;
+		PIR4bits.CCP4IF = 0;
+	}
+	if (!V.rpm_overflow) {
+		V.rpm_counts = CCP4_CaptureRead();
+		LED5 = (uint8_t)!LED5;
+	}
+	TMR5_WriteTimer(0);
+
 	// line rotation sequencer
 	// Hall effect index signal, start of rotation
-	LED1 = (uint8_t)!LED1;
+
 	if (V.l_state == ISR_STATE_LINE) { // off state too long for full rotation, hall signal while in state
 		V.l_full += strobe_adjust; // off state lower limit adjustments for smooth strobe rotation
 	}
@@ -109,8 +120,9 @@ void INT0_DefaultInterruptHandler(void)
 	R_OUT = 0;
 	B_OUT = 0;
 	V.l_state = ISR_STATE_LINE; // off time after index to start time
-	LED2 = 0;
+	V.rpm_overflow = false;
 	BLINKLED = ~BLINKLED;
+	LED2 = 0;
 }
 
 void EXT_INT_Initialize(void)
