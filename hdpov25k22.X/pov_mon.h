@@ -35,7 +35,7 @@ typedef struct V_data { // control data structure with possible volatile issues
 	volatile uint8_t rx_data;
 	uint16_t l_size;
 	volatile uint16_t rotations, sequences, rpm_counts;
-	volatile bool rpm_overflow;
+	volatile bool rpm_overflow, rpm_update;
 	volatile uint16_t l_full, l_width;
 	uint8_t str[24];
 } V_data;
@@ -52,9 +52,16 @@ typedef volatile struct L_seq {
 	uint16_t offset; // line movement 
 } L_seq;
 
+typedef volatile struct S_seq {
+	uint16_t zero_offset;	// flag to first led position
+	uint16_t slot_count;	// counts to next led position
+	uint16_t disk_slot_count, disk_next_count;
+} S_seq;
+
 /* data for one complete rotation*/
 typedef volatile struct L_data {
 	struct L_seq sequence;
+	struct S_seq slot;
 	uint16_t strobe;
 } L_data;
 

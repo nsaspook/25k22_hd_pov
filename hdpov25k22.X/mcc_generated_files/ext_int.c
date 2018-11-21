@@ -72,7 +72,10 @@ void INT0_DefaultInterruptHandler(void)
 		PIR4bits.CCP4IF = 0;
 	}
 	if (!V.rpm_overflow) {
-		V.rpm_counts = CCP4_CaptureRead();
+		if (!V.rpm_update) {
+			V.rpm_counts = CCP4_CaptureRead();
+			V.rpm_update = true;
+		}
 		LED5 = (uint8_t)!LED5;
 	}
 	TMR5_WriteTimer(0);
@@ -95,12 +98,6 @@ void INT0_DefaultInterruptHandler(void)
 		if (L_ptr->strobe < V.l_full)
 			L_ptr->strobe = V.l_full; // set to sliding lower limit
 		break;
-	case true:
-		L_ptr->strobe -= L_ptr->sequence.offset;
-		if (L_ptr->strobe < V.l_full)
-			L_ptr->strobe = strobe_limit_h;
-		break;
-
 	default:
 		L_ptr->strobe -= L_ptr->sequence.offset;
 		if (L_ptr->strobe < V.l_full)

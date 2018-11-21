@@ -12,8 +12,46 @@ int16_t sw_work(void);
 void init_povmon(void);
 uint8_t init_hov_params(void);
 
-struct V_data V = {0};
-struct L_data L[strobe_max] = {0}, *L_ptr;
+/* line strobes in 16-bit timer values for spacing */
+/* for an interrupt driven state machine */
+struct L_data L[strobe_max] = {
+	{
+		.strobe = 60000,
+		.sequence.R = true,
+		.sequence.offset = strobe_up,
+	},
+	{
+		.strobe = 50000,
+		.sequence.G = true,
+		.sequence.offset = strobe_down,
+	},
+	{
+		.strobe = 40000,
+		.sequence.B = true,
+		.sequence.offset = strobe_around,
+	},
+	{
+		.strobe = 30000,
+		.sequence.R = true,
+		.sequence.G = true,
+		.sequence.B = true,
+		.sequence.offset = 0,
+		.sequence.end = true,
+	}
+}, *L_ptr;
+
+struct V_data V = {
+	.rpm_overflow = true,
+	.rpm_update = false,
+	.line_num = 0,
+	.comm_state = APP_STATE_INIT,
+	.l_size = sizeof(L[0]),
+	.l_state = ISR_STATE_WAIT,
+	.l_full = strobe_limit_l,
+	.l_width = strobe_line,
+};
+
+
 
 /* RS232 command buffer */
 struct ringBufS_t ring_buf1;
@@ -21,6 +59,10 @@ struct ringBufS_t ring_buf1;
 const char build_date[] = __DATE__, build_time[] = __TIME__, versions[] = "2.00";
 const uint16_t TIMEROFFSET = 18000, TIMERDEF = 60000;
 
+/*
+ * THIS CODE NOT USED
+ * interrupt code moved to the needed ISR routines for each device module
+ */
 void tm_handler(void) // timer/serial functions are handled here
 {
 	LED1 = 1;
@@ -348,12 +390,6 @@ void init_povmon(void)
 /* program data setup */
 uint8_t init_hov_params(void)
 {
-	V.line_num = 0;
-	V.comm_state = APP_STATE_INIT;
-	V.l_size = sizeof(L[0]);
-	V.l_state = ISR_STATE_WAIT;
-	V.l_full = strobe_limit_l;
-	V.l_width = strobe_line;
 
 	USART_putsr("\r\nVersion ");
 	USART_putsr(versions);
@@ -368,28 +404,8 @@ uint8_t init_hov_params(void)
 		USART_putsr(", dirty boot");
 
 	L_ptr = &L[0];
-	/* three line strobes in 3 16-bit timer values for spacing */
-	/* for an interrupt driven state machine */
-	L[0].strobe = 60000;
-	L[0].sequence.R = 1;
-	L[0].sequence.offset = strobe_up;
-
-	L[1].strobe = 50000; // 62000
-	L[1].sequence.G = 1;
-	L[1].sequence.offset = strobe_down;
-
-	L[2].strobe = 40000;
-	L[2].sequence.B = 1;
-	L[2].sequence.offset = strobe_around;
-
-	L[3].strobe = 30000;
-	L[3].sequence.R = 1;
-	L[3].sequence.G = 1;
-	L[3].sequence.B = 1;
-	L[3].sequence.offset = 0;
-	L[3].sequence.end = 1;
-
 	L[strobe_max - 1].sequence.end = 1;
+
 	return 0;
 }
 
@@ -397,7 +413,7 @@ void main_hdpov(void)
 {
 	/* configure system */
 	init_povmon();
-	
+
 	/* Loop forever */
 	while (true) { // busy work
 		sw_work(); // run housekeeping for non-ISR tasks
