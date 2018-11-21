@@ -14,6 +14,12 @@ uint8_t init_hov_params(void);
 
 /* line strobes in 16-bit timer values for spacing */
 /* for an interrupt driven state machine */
+/*
+ * 8.35ms per rotation
+ * 235us for sense tab width
+ * 7 tabs for first led position.
+ */
+
 struct L_data L[strobe_max] = {
 	{
 		.strobe = 60000,
