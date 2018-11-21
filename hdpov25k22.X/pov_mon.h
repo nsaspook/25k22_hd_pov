@@ -84,6 +84,7 @@ typedef volatile struct L_data {
 #define G_OUT		LATAbits.LATA0
 #define R_OUT		LATAbits.LATA1
 #define B_OUT		LATAbits.LATA2
+#define A_OUT		LATAbits.LATA3
 #define BLINKLED	PORTBbits.RB5
 #define RPMLED		LATCbits.LATC3
 #define SW1		PORTAbits.RA4

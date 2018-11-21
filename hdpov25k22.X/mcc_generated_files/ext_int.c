@@ -63,12 +63,12 @@ void INT0_SetInterruptHandler(void (* InterruptHandler)(void))
 
 void INT0_DefaultInterruptHandler(void)
 {
-	LED1 = (uint8_t)!LED1;
+	LED1 = ~LED1;
 	LED2 = 1;
 	LED3 = 1;
 	LED4 = 1;
 	if (PIR4bits.CCP4IF) {
-		LED5 = (uint8_t)!LED5;
+		LED5 = ~LED5;
 		PIR4bits.CCP4IF = 0;
 	}
 	if (!V.rpm_overflow) {
@@ -76,7 +76,7 @@ void INT0_DefaultInterruptHandler(void)
 			V.rpm_counts = CCP4_CaptureRead();
 			V.rpm_update = true;
 		}
-		LED5 = (uint8_t)!LED5;
+		LED5 = ~LED5;
 	}
 	TMR5_WriteTimer(0);
 

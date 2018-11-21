@@ -184,7 +184,7 @@ void TMR1_DefaultInterruptHandler(void)
 	// or set custom function using TMR1_SetInterruptHandler()
 	// line RGB pulsing state machine
 
-	LED3 = (uint8_t)!LED3;
+	LED3 = ~LED3;
 	switch (V.l_state) {
 	case ISR_STATE_FLAG:
 		WRITETIMER1(L_ptr->strobe); // strobe positioning during rotation

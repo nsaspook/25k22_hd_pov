@@ -160,7 +160,7 @@ void tm_handler(void) // timer/serial functions are handled here
 	if (INTCONbits.TMR0IF) {
 		INTCONbits.TMR0IF = false;
 		WRITETIMER0(TIMEROFFSET);
-		LED5 = (uint8_t)!LED5; // active LED blinker
+		LED5 = ~LED5; // active LED blinker
 	}
 	LED1 = 0;
 }
