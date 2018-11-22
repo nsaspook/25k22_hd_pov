@@ -23,18 +23,18 @@ uint8_t init_hov_params(void);
 struct L_data L[strobe_max] = {
 	{
 		.strobe = 60000,
-		.sequence.R = true,
-		.sequence.offset = strobe_up,
+		.sequence.G = true,
+		.sequence.offset = 0,
 	},
 	{
 		.strobe = 50000,
-		.sequence.G = true,
-		.sequence.offset = strobe_down,
+		.sequence.R = true,
+		.sequence.offset = 0,
 	},
 	{
 		.strobe = 40000,
 		.sequence.B = true,
-		.sequence.offset = strobe_around,
+		.sequence.offset = 0,
 	},
 	{
 		.strobe = 30000,

@@ -116,6 +116,7 @@ void INT0_DefaultInterruptHandler(void)
 	G_OUT = 0;
 	R_OUT = 0;
 	B_OUT = 0;
+	A_OUT = 0;
 	V.l_state = ISR_STATE_LINE; // off time after index to start time
 	V.rpm_overflow = false;
 	BLINKLED = ~BLINKLED;

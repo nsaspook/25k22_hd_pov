@@ -192,6 +192,7 @@ void TMR1_DefaultInterruptHandler(void)
 		G_OUT = 0;
 		R_OUT = 0;
 		B_OUT = 0;
+		A_OUT = 0;
 		V.l_state = ISR_STATE_LINE; // off time after index to start time
 		break;
 	case ISR_STATE_LINE:
@@ -203,6 +204,9 @@ void TMR1_DefaultInterruptHandler(void)
 				G_OUT = 1;
 			if (L_ptr->sequence.B)
 				B_OUT = 1;
+			if (L_ptr->sequence.A)
+				A_OUT = 1;
+
 		}
 
 		V.l_state = ISR_STATE_WAIT; // on start time duration for strobe pulse
@@ -213,6 +217,7 @@ void TMR1_DefaultInterruptHandler(void)
 		G_OUT = 0; // blank RGB
 		R_OUT = 0;
 		B_OUT = 0;
+		A_OUT = 0;
 		break;
 	}
 }

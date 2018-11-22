@@ -45,6 +45,7 @@ typedef volatile struct L_seq {
 	uint8_t R : 1;
 	uint8_t G : 1;
 	uint8_t B : 1;
+	uint8_t A : 1;
 	uint8_t end : 1; // last line in sequence
 	uint8_t skip : 1; // don't light led
 	uint8_t rot : 1; // rotation and sequence flags
@@ -85,7 +86,7 @@ typedef volatile struct L_data {
 #define R_OUT		LATAbits.LATA1
 #define B_OUT		LATAbits.LATA2
 #define A_OUT		LATAbits.LATA3
-#define BLINKLED	PORTBbits.RB5
+#define BLINKLED	LATBbits.LATB5
 #define RPMLED		LATCbits.LATC3
 #define SW1		PORTAbits.RA4
 
