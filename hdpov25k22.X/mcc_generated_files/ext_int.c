@@ -73,6 +73,7 @@ void INT0_DefaultInterruptHandler(void)
 	}
 	if (!V.rpm_overflow) {
 		if (!V.rpm_update) {
+			V.rpm_counts_prev = V.rpm_counts;
 			V.rpm_counts = CCP4_CaptureRead();
 			V.rpm_update = true;
 		}

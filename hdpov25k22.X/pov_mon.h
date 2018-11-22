@@ -34,7 +34,7 @@ typedef struct V_data { // control data structure with possible volatile issues
 	volatile uint8_t line_num : 2;
 	volatile uint8_t rx_data;
 	uint16_t l_size;
-	volatile uint16_t rotations, sequences, rpm_counts;
+	volatile uint16_t rotations, sequences, rpm_counts, rpm_counts_prev;
 	volatile bool rpm_overflow, rpm_update;
 	volatile uint16_t l_full, l_width;
 	uint8_t str[24];

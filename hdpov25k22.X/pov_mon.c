@@ -235,13 +235,12 @@ int16_t sw_work(void)
 		ret = -1;
 
 	if (!SW1) {
-		USART_putsr("\r\n Timer limit,");
-		//		itoa(V.str, V.l_full, 10);
-		uitoa(V.str, V.l_full);
+		USART_putsr("\r\n RPM counts,");
+		uitoa(V.str, V.rpm_counts);
 		USART_puts(V.str);
-		USART_putsr(" Timer value,");
-		//		itoa(V.str, L_ptr->strobe, 10);
-		uitoa(V.str, L_ptr->strobe);
+		V.rpm_update = false;
+		USART_putsr(" prev value,");
+		uitoa(V.str, V.rpm_counts_prev);
 		USART_puts(V.str);
 	}
 
