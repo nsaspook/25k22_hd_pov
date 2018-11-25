@@ -73,14 +73,14 @@ void TMR5_Initialize(void)
 	//T5GSS T5G_pin; TMR5GE disabled; T5GTM disabled; T5GPOL low; T5GGO done; T5GSPM disabled; 
 	T5GCON = 0x00;
 
-	//TMR5H 177; 
-	TMR5H = 0xB1;
+    //TMR5H 125; 
+    TMR5H = 0x7D;
 
-	//TMR5L 224; 
-	TMR5L = 0xE0;
+    //TMR5L 136; 
+    TMR5L = 0x88;
 
 	// Load the TMR value to reload variable
-	timer5ReloadVal = TMR5;
+    timer5ReloadVal=TMR5;
 
 	// Clearing IF flag before enabling the interrupt.
 	PIR5bits.TMR5IF = 0;
@@ -118,14 +118,15 @@ uint16_t TMR5_ReadTimer(void)
 	readValLow = TMR5L;
 	readValHigh = TMR5H;
 
-	readVal = ((uint16_t) readValHigh << 8) | readValLow;
+    readVal = ((uint16_t)readValHigh << 8) | readValLow;
 
 	return readVal;
 }
 
 void TMR5_WriteTimer(uint16_t timerVal)
 {
-	if (T5CONbits.T5SYNC == 1) {
+    if (T5CONbits.T5SYNC == 1)
+    {
 		// Stop the Timer by writing to TMRxON bit
 		T5CONbits.TMR5ON = 0;
 
@@ -134,8 +135,10 @@ void TMR5_WriteTimer(uint16_t timerVal)
 		TMR5L = (uint8_t) timerVal;
 
 		// Start the Timer after writing to the register
-		T5CONbits.TMR5ON = 1;
-	} else {
+        T5CONbits.TMR5ON =1;
+    }
+    else
+    {
 		// Write to the Timer5 register
 		TMR5H = (timerVal >> 8);
 		TMR5L = (uint8_t) timerVal;
@@ -164,21 +167,21 @@ void TMR5_ISR(void)
 	PIR5bits.TMR5IF = 0;
 	TMR5_WriteTimer(timer5ReloadVal);
 
-	if (TMR5_InterruptHandler) {
+    if(TMR5_InterruptHandler)
+    {
 		TMR5_InterruptHandler();
 	}
 }
 
-void TMR5_SetInterruptHandler(void (* InterruptHandler)(void))
-{
+
+void TMR5_SetInterruptHandler(void (* InterruptHandler)(void)){
 	TMR5_InterruptHandler = InterruptHandler;
 }
 
-void TMR5_DefaultInterruptHandler(void)
-{
+void TMR5_DefaultInterruptHandler(void){
 	// add your TMR5 interrupt custom code
 	// or set custom function using TMR5_SetInterruptHandler()
-	LED4 = ~LED4;
+	// = ~LED4;
 	V.rpm_overflow = true;
 }
 

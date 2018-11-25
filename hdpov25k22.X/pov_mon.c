@@ -22,9 +22,10 @@ uint8_t init_hov_params(void);
 
 struct L_data L[strobe_max] = {
 	{
-		.strobe = 60000,
+		.strobe = 62350,
 		.sequence.G = true,
 		.sequence.offset = 0,
+		.sequence.end = true,
 	},
 	{
 		.strobe = 50000,
@@ -239,8 +240,8 @@ int16_t sw_work(void)
 		uitoa(V.str, V.rpm_counts);
 		USART_puts(V.str);
 		V.rpm_update = false;
-		USART_putsr(" prev value,");
-		uitoa(V.str, V.rpm_counts_prev);
+		USART_putsr(" strobe,");
+		uitoa(V.str, L_ptr->strobe);
 		USART_puts(V.str);
 	}
 

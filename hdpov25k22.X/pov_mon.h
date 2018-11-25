@@ -106,7 +106,7 @@ typedef volatile struct L_data {
 
 /* rotation params for 40mHZ PIC18f1320 */
 #define strobe_adjust	11
-#define strobe_limit_l	10400 // this limit is the starting point for the calc'd value from the rs-232 port
+#define strobe_limit_l	32200 // this limit is the starting point for the calc'd value from the rs-232 port
 #define strobe_limit_h	65534
 #define strobe_line	62400 // line width timer count
 #define strobe_max	16
