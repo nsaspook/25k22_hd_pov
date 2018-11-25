@@ -200,7 +200,6 @@ void TMR1_DefaultInterruptHandler(void){
 	case ISR_STATE_LINE:
 		WRITETIMER1(V.l_width);
 		LED3 = false;
-		LED4 = false;
 		if (!L_ptr->sequence.skip) {
 			if (L_ptr->sequence.R)
 				R_OUT = 1;

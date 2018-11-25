@@ -181,7 +181,7 @@ void TMR5_SetInterruptHandler(void (* InterruptHandler)(void)){
 void TMR5_DefaultInterruptHandler(void){
 	// add your TMR5 interrupt custom code
 	// or set custom function using TMR5_SetInterruptHandler()
-	// = ~LED4;
+	LED4 = ~LED4;
 	V.rpm_overflow = true;
 }
 

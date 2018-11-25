@@ -20,28 +20,31 @@ uint8_t init_hov_params(void);
  * 7 tabs for first led position.
  */
 
+struct S_seq S = {
+	.zero_offset = z_offset,
+	.slot_count = s_count,
+};
+
 struct L_data L[strobe_max] = {
 	{
-		.strobe = 62350,
+		.strobe = z_offset,
 		.sequence.G = true,
 		.sequence.offset = 0,
-		.sequence.end = true,
+		.sequence.end = false,
 	},
 	{
-		.strobe = 50000,
+		.strobe = z_offset - s_count,
 		.sequence.R = true,
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = 40000,
+		.strobe = z_offset - s_count * 2,
 		.sequence.B = true,
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = 30000,
-		.sequence.R = true,
-		.sequence.G = true,
-		.sequence.B = true,
+		.strobe = z_offset - s_count * 3,
+		.sequence.A = true,
 		.sequence.offset = 0,
 		.sequence.end = true,
 	}

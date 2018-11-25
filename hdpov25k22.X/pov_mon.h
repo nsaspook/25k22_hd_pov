@@ -110,4 +110,7 @@ typedef volatile struct L_data {
 #define strobe_limit_h	65534
 #define strobe_line	62400 // line width timer count
 #define strobe_max	16
+
+#define z_offset	62350
+#define s_count	8325
 #endif 
