@@ -23,27 +23,31 @@ uint8_t init_hov_params(void);
 struct S_seq S = {
 	.zero_offset = z_offset,
 	.slot_count = s_count,
+	.disk_count= d_count,
 };
 
+/*
+ * pattern test data
+ */
 struct L_data L[strobe_max] = {
 	{
-		.strobe = z_offset,
+		.strobe = z_offset-d_count,
 		.sequence.G = true,
 		.sequence.offset = 0,
 		.sequence.end = false,
 	},
 	{
-		.strobe = z_offset - s_count,
+		.strobe = (z_offset - d_count) - s_count,
 		.sequence.R = true,
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = z_offset - s_count * 2,
+		.strobe = (z_offset - d_count)  - s_count * 2,
 		.sequence.B = true,
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = z_offset - s_count * 3,
+		.strobe = (z_offset - d_count)  - s_count * 3,
 		.sequence.A = true,
 		.sequence.offset = 0,
 		.sequence.end = true,

@@ -54,8 +54,9 @@ typedef volatile struct L_seq {
 } L_seq;
 
 typedef volatile struct S_seq {
-	uint16_t zero_offset;	// flag to first led position
-	uint16_t slot_count;	// counts to next led position
+	uint16_t zero_offset; // flag to first led position
+	uint16_t slot_count; // counts to next led position
+	uint16_t disk_count;
 	uint16_t disk_slot_count, disk_next_count;
 } S_seq;
 
@@ -104,7 +105,7 @@ typedef volatile struct L_data {
 #define strobe_around	1080
 #endif
 
-/* rotation params for 40mHZ PIC18f1320 */
+/* rotation params for 64mHZ PIC18f25k22 */
 #define strobe_adjust	11
 #define strobe_limit_l	32200 // this limit is the starting point for the calc'd value from the rs-232 port
 #define strobe_limit_h	65534
@@ -112,5 +113,6 @@ typedef volatile struct L_data {
 #define strobe_max	16
 
 #define z_offset	62350
-#define s_count	8325
+#define s_count		8325
+#define d_count		0
 #endif 
