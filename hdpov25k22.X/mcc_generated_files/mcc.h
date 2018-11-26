@@ -51,10 +51,9 @@
 #include <stdbool.h>
 #include "interrupt_manager.h"
 #include "tmr5.h"
+#include "ccp4.h"
 #include "tmr3.h"
 #include "tmr1.h"
-#include "tmr0.h"
-#include "ccp4.h"
 #include "ext_int.h"
 #include "eusart1.h"
 

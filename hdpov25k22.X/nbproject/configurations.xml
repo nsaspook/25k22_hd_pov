@@ -11,7 +11,6 @@
         <itemPath>mcc_generated_files/tmr1.h</itemPath>
         <itemPath>mcc_generated_files/mcc.h</itemPath>
         <itemPath>mcc_generated_files/pin_manager.h</itemPath>
-        <itemPath>mcc_generated_files/tmr0.h</itemPath>
         <itemPath>mcc_generated_files/ext_int.h</itemPath>
         <itemPath>mcc_generated_files/eusart1.h</itemPath>
         <itemPath>mcc_generated_files/tmr3.h</itemPath>
@@ -35,7 +34,6 @@
         <itemPath>mcc_generated_files/tmr1.c</itemPath>
         <itemPath>mcc_generated_files/mcc.c</itemPath>
         <itemPath>mcc_generated_files/pin_manager.c</itemPath>
-        <itemPath>mcc_generated_files/tmr0.c</itemPath>
         <itemPath>mcc_generated_files/ext_int.c</itemPath>
         <itemPath>mcc_generated_files/eusart1.c</itemPath>
         <itemPath>mcc_generated_files/tmr3.c</itemPath>
