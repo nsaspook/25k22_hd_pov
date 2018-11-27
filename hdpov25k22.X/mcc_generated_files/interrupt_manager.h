@@ -137,12 +137,23 @@ void INTERRUPT_Initialize (void);
  * @Returns
     none
  * @Description
-    Interrupt service routine. Calls module interrupt handlers.
+    High priority interrupt service routine. Calls module interrupt handlers.
  * @Example
-    INTERRUPT_InterruptManager();
+    INTERRUPT_InterruptManagerHigh();
  */
 void __interrupt() INTERRUPT_InterruptManager (void);
 
+/**
+ * @Param
+    none
+ * @Returns
+    none
+ * @Description
+    Low priority interrupt service routine. Calls module interrupt handlers.
+ * @Example
+    INTERRUPT_InterruptManagerLow();
+ */
+void __interrupt() INTERRUPT_InterruptManagerLow (void);
 #endif  // INTERRUPT_MANAGER_H
 /**
  End of File

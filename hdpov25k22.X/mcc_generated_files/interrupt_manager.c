@@ -58,36 +58,30 @@ void INTERRUPT_Initialize(void)
 
 	// Interrupt INT0I has no priority bit. It will always be called from the High Interrupt Vector
 
-	// TMRI - high priority
-	IPR5bits.TMR5IP = 1;
-
 	// RCI - high priority
 	IPR1bits.RC1IP = 1;
-
-	// TMRI - high priority
-	IPR2bits.TMR3IP = 1;
 
 	// TMRI - high priority
 	IPR1bits.TMR1IP = 1;
 
 
+	// TMRI - low priority
+	IPR2bits.TMR3IP = 0;
+
+	// TMRI - low priority
+	IPR5bits.TMR5IP = 0;
+
 }
 
-void __interrupt() INTERRUPT_InterruptManagerHigh(void)
+void __interrupt(high_priority) INTERRUPT_InterruptManagerHigh(void)
 {
 	LED2 = 1;
 	// interrupt handler
 	if (INTCONbits.INT0IE == 1 && INTCONbits.INT0IF == 1) {
 		INT0_ISR();
 	}
-	if (PIE5bits.TMR5IE == 1 && PIR5bits.TMR5IF == 1) {
-		TMR5_ISR();
-	}
 	if (PIE1bits.RC1IE == 1 && PIR1bits.RC1IF == 1) {
 		EUSART1_Receive_ISR();
-	}
-	if (PIE2bits.TMR3IE == 1 && PIR2bits.TMR3IF == 1) {
-		TMR3_ISR();
 	}
 	if (PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1) {
 		TMR1_ISR();
@@ -95,6 +89,18 @@ void __interrupt() INTERRUPT_InterruptManagerHigh(void)
 	LED2 = 0;
 }
 
+void __interrupt(low_priority) INTERRUPT_InterruptManagerLow(void)
+{
+	LED2 = ~LED2;
+	// interrupt handler
+	if (PIE2bits.TMR3IE == 1 && PIR2bits.TMR3IF == 1) {
+		TMR3_ISR();
+	}
+	if (PIE5bits.TMR5IE == 1 && PIR5bits.TMR5IF == 1) {
+		TMR5_ISR();
+	}
+	LED2 = ~LED2;
+}
 /**
  End of File
  */

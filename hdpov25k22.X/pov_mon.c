@@ -242,7 +242,7 @@ int16_t sw_work(void)
 	if (V.l_state != ISR_STATE_WAIT)
 		ret = -1;
 
-	if (!SW1 && false) {
+	if (!SW1) {
 		USART_putsr("\r\n RPM counts,");
 		uitoa(V.str, V.rpm_counts);
 		USART_puts(V.str);
