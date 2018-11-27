@@ -64,7 +64,6 @@ void INT0_SetInterruptHandler(void (* InterruptHandler)(void))
 void INT0_DefaultInterruptHandler(void)
 {
 	LED1 = ~LED1;
-	LED2 = 1;
 	LED3 = 1;
 	LED4 = 1;
 	if (PIR4bits.CCP4IF) {
@@ -121,7 +120,6 @@ void INT0_DefaultInterruptHandler(void)
 	V.l_state = ISR_STATE_LINE; // off time after index to start time
 	V.rpm_overflow = false;
 	BLINKLED = ~BLINKLED;
-	LED2 = 0;
 }
 
 void EXT_INT_Initialize(void)
