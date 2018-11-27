@@ -109,10 +109,10 @@ typedef volatile struct L_data {
 #define strobe_adjust	11
 #define strobe_limit_l	32200 // this limit is the starting point for the calc'd value from the rs-232 port
 #define strobe_limit_h	65534
-#define strobe_line	62400 // line width timer count
+#define strobe_line	65200 // line width timer count
 #define strobe_max	16
 
-#define z_offset	62350
+#define z_offset	60000	//62350
 #define s_count		8325
-#define d_count		0
+#define d_count		0	//3800
 #endif 

@@ -37,7 +37,7 @@ struct L_data L[strobe_max] = {
 		.sequence.end = false,
 	},
 	{
-		.strobe = (z_offset - d_count) - s_count,
+		.strobe = z_offset - s_count,
 		.sequence.R = true,
 		.sequence.offset = 0,
 	},
@@ -47,7 +47,7 @@ struct L_data L[strobe_max] = {
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = (z_offset - d_count)  - s_count * 3,
+		.strobe = z_offset - s_count * 3,
 		.sequence.A = true,
 		.sequence.offset = 0,
 		.sequence.end = true,
@@ -242,7 +242,7 @@ int16_t sw_work(void)
 	if (V.l_state != ISR_STATE_WAIT)
 		ret = -1;
 
-	if (!SW1) {
+	if (!SW1 && false) {
 		USART_putsr("\r\n RPM counts,");
 		uitoa(V.str, V.rpm_counts);
 		USART_puts(V.str);
