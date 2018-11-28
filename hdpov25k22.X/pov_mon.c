@@ -165,7 +165,7 @@ int16_t sw_work(void)
 	} L_union;
 	int16_t ret = 0;
 
-	if (V.l_state != ISR_STATE_WAIT)
+	if (V.l_state != ISR_STATE_DONE)
 		ret = -1;
 
 	if (!SW1) {

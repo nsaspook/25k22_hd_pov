@@ -77,14 +77,14 @@ void TMR1_Initialize(void)
 	//T1GSS T1G_pin; TMR1GE disabled; T1GTM disabled; T1GPOL low; T1GGO done; T1GSPM disabled; 
 	T1GCON = 0x00;
 
-    //TMR1H 125; 
-    TMR1H = 0x7D;
+	//TMR1H 125; 
+	TMR1H = 0x7D;
 
-    //TMR1L 136; 
-    TMR1L = 0x88;
+	//TMR1L 136; 
+	TMR1L = 0x88;
 
 	// Load the TMR value to reload variable
-    timer1ReloadVal=TMR1;
+	timer1ReloadVal = TMR1;
 
 	// Clearing IF flag before enabling the interrupt.
 	PIR1bits.TMR1IF = 0;
@@ -95,8 +95,8 @@ void TMR1_Initialize(void)
 	// Set Default Interrupt Handler
 	TMR1_SetInterruptHandler(TMR1_DefaultInterruptHandler);
 
-    // T1CKPS 1:4; T1OSCEN disabled; T1SYNC synchronize; TMR1CS FOSC/4; TMR1ON enabled; T1RD16 enabled; 
-    T1CON = 0x23;
+	// T1CKPS 1:4; T1OSCEN disabled; T1SYNC synchronize; TMR1CS FOSC/4; TMR1ON enabled; T1RD16 enabled; 
+	T1CON = 0x23;
 }
 
 void TMR1_StartTimer(void)
@@ -122,15 +122,14 @@ uint16_t TMR1_ReadTimer(void)
 	readValLow = TMR1L;
 	readValHigh = TMR1H;
 
-    readVal = ((uint16_t)readValHigh << 8) | readValLow;
+	readVal = ((uint16_t) readValHigh << 8) | readValLow;
 
 	return readVal;
 }
 
 void TMR1_WriteTimer(uint16_t timerVal)
 {
-    if (T1CONbits.T1SYNC == 1)
-    {
+	if (T1CONbits.T1SYNC == 1) {
 		// Stop the Timer by writing to TMRxON bit
 		T1CONbits.TMR1ON = 0;
 
@@ -139,10 +138,8 @@ void TMR1_WriteTimer(uint16_t timerVal)
 		TMR1L = (uint8_t) timerVal;
 
 		// Start the Timer after writing to the register
-        T1CONbits.TMR1ON =1;
-    }
-    else
-    {
+		T1CONbits.TMR1ON = 1;
+	} else {
 		// Write to the Timer1 register
 		TMR1H = (timerVal >> 8);
 		TMR1L = (uint8_t) timerVal;
@@ -171,18 +168,18 @@ void TMR1_ISR(void)
 	PIR1bits.TMR1IF = 0;
 	TMR1_WriteTimer(timer1ReloadVal);
 
-    if(TMR1_InterruptHandler)
-    {
+	if (TMR1_InterruptHandler) {
 		TMR1_InterruptHandler();
 	}
 }
 
-
-void TMR1_SetInterruptHandler(void (* InterruptHandler)(void)){
+void TMR1_SetInterruptHandler(void (* InterruptHandler)(void))
+{
 	TMR1_InterruptHandler = InterruptHandler;
 }
 
-void TMR1_DefaultInterruptHandler(void){
+void TMR1_DefaultInterruptHandler(void)
+{
 	// add your TMR1 interrupt custom code
 	// or set custom function using TMR1_SetInterruptHandler()
 	// line RGB pulsing state machine using current lines pointer
@@ -215,12 +212,14 @@ void TMR1_DefaultInterruptHandler(void){
 		V.l_state = ISR_STATE_WAIT; // on start time duration for strobe pulse
 		break;
 	case ISR_STATE_WAIT: // waiting for next HALL sensor pulse
+	case ISR_STATE_DONE:
 	default:
 		T1CONbits.TMR1ON = 0; // idle timer
 		G_OUT = 0; // blank RGB
 		R_OUT = 0;
 		B_OUT = 0;
 		A_OUT = 0;
+		V.l_state = ISR_STATE_DONE; // on start time duration for strobe pulse
 		break;
 	}
 }
