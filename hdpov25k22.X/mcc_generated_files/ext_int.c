@@ -38,7 +38,7 @@
 
 void (*INT0_InterruptHandler)(void);
 extern struct V_data V;
-extern struct L_data L[strobe_max], *L_ptr;
+extern struct L_data L0[strobe_max], L1[strobe_max], *L_ptr;
 
 void INT0_ISR(void)
 {
@@ -88,7 +88,15 @@ void INT0_DefaultInterruptHandler(void)
 	}
 	V.l_state = ISR_STATE_FLAG; // restart lamp flashing sequence, off time
 
-	L_ptr = &L[V.line_num]; // select line strobe data
+	switch (V.l_buffer) {
+	case 0:
+		L_ptr = &L0[V.line_num]; // select line strobes data 0
+		break;
+	default:
+		L_ptr = &L1[V.line_num]; // select line strobes data 1
+		break;
+	}
+
 	V.rotations++;
 
 	/* limit rotational timer values during offsets */
@@ -110,7 +118,7 @@ void INT0_DefaultInterruptHandler(void)
 		V.sequences++;
 	}
 
-	// start line RGB pulsing state machine
+	// start line RGB pulsing state machine using current lines pointer
 	WRITETIMER1(L_ptr->strobe); // strobe positioning during rotation
 	T1CONbits.TMR1ON = 1;
 	G_OUT = 0;

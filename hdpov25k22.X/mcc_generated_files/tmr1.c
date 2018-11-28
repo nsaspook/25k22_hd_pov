@@ -185,7 +185,7 @@ void TMR1_SetInterruptHandler(void (* InterruptHandler)(void)){
 void TMR1_DefaultInterruptHandler(void){
 	// add your TMR1 interrupt custom code
 	// or set custom function using TMR1_SetInterruptHandler()
-	// line RGB pulsing state machine
+	// line RGB pulsing state machine using current lines pointer
 
 	switch (V.l_state) {
 	case ISR_STATE_FLAG:

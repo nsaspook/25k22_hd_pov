@@ -23,15 +23,15 @@ uint8_t init_hov_params(void);
 struct S_seq S = {
 	.zero_offset = z_offset,
 	.slot_count = s_count,
-	.disk_count= d_count,
+	.disk_count = d_count,
 };
 
 /*
  * pattern test data
  */
-struct L_data L[strobe_max] = {
+struct L_data L0[strobe_max] = {
 	{
-		.strobe = z_offset-d_count,
+		.strobe = z_offset - d_count,
 		.sequence.G = true,
 		.sequence.offset = 0,
 		.sequence.end = false,
@@ -42,7 +42,7 @@ struct L_data L[strobe_max] = {
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = (z_offset - d_count)  - s_count * 2,
+		.strobe = (z_offset - d_count) - s_count * 2,
 		.sequence.B = true,
 		.sequence.offset = 0,
 	},
@@ -52,17 +52,43 @@ struct L_data L[strobe_max] = {
 		.sequence.offset = 0,
 		.sequence.end = true,
 	}
-}, *L_ptr;
+}, *L_ptr, *L_ptr_buf,
+	L1[strobe_max] = {
+	{
+		.strobe = z_offset - d_count,
+		.sequence.G = true,
+		.sequence.offset = 0,
+		.sequence.end = false,
+	},
+	{
+		.strobe = z_offset - s_count,
+		.sequence.R = false,
+		.sequence.offset = 0,
+	},
+	{
+		.strobe = (z_offset - d_count) - s_count * 2,
+		.sequence.B = true,
+		.sequence.offset = 0,
+	},
+	{
+		.strobe = z_offset - s_count * 3,
+		.sequence.A = false,
+		.sequence.offset = 0,
+		.sequence.end = true,
+	}
+}
+;
 
 struct V_data V = {
 	.rpm_overflow = true,
 	.rpm_update = false,
 	.line_num = 0,
 	.comm_state = APP_STATE_INIT,
-	.l_size = sizeof(L[0]),
+	.l_size = sizeof(L0[0]),
 	.l_state = ISR_STATE_WAIT,
 	.l_full = strobe_limit_l,
 	.l_width = strobe_line,
+	.l_buffer = 0,
 };
 
 
@@ -72,106 +98,6 @@ struct ringBufS_t ring_buf1;
 
 const char build_date[] = __DATE__, build_time[] = __TIME__, versions[] = "2.00";
 const uint16_t TIMEROFFSET = 18000, TIMERDEF = 60000;
-
-/*
- * THIS CODE NOT USED
- * interrupt code moved to the needed ISR routines for each device module
- */
-void tm_handler(void) // timer/serial functions are handled here
-{
-	LED1 = 1;
-	// line rotation sequencer
-	if (INTCONbits.INT0IF) { // Hall effect index signal, start of rotation
-		INTCONbits.INT0IF = false;
-		RPMLED = (uint8_t)!RPMLED;
-		if (V.l_state == ISR_STATE_LINE) { // off state too long for full rotation, hall signal while in state
-			V.l_full += strobe_adjust; // off state lower limit adjustments for smooth strobe rotation
-		}
-		V.l_state = ISR_STATE_FLAG; // restart lamp flashing sequence, off time
-
-		L_ptr = &L[V.line_num]; // select line strobe data
-		V.rotations++;
-
-		/* limit rotational timer values during offsets */
-		switch (L_ptr->sequence.down) {
-		case false:
-			L_ptr->strobe += L_ptr->sequence.offset;
-			if (L_ptr->strobe < V.l_full)
-				L_ptr->strobe = V.l_full; // set to sliding lower limit
-			break;
-		case true:
-			L_ptr->strobe -= L_ptr->sequence.offset;
-			if (L_ptr->strobe < V.l_full)
-				L_ptr->strobe = strobe_limit_h;
-			break;
-
-		default:
-			L_ptr->strobe -= L_ptr->sequence.offset;
-			if (L_ptr->strobe < V.l_full)
-				L_ptr->strobe = strobe_limit_h;
-			break;
-		}
-		V.line_num++;
-		if (L_ptr->sequence.end || (V.line_num >= strobe_max)) { // rollover for sequence patterns
-			V.line_num = 0;
-			V.sequences++;
-		}
-	}
-
-	// line RGB pulsing state machine
-	if (PIR1bits.TMR1IF || (V.l_state == ISR_STATE_FLAG)) { // Timer1 int handler, for strobe rotation timing
-		PIR1bits.TMR1IF = false;
-
-		switch (V.l_state) {
-		case ISR_STATE_FLAG:
-			WRITETIMER1(L_ptr->strobe); // strobe positioning during rotation
-			T1CONbits.TMR1ON = 1;
-			G_OUT = 0;
-			R_OUT = 0;
-			B_OUT = 0;
-			V.l_state = ISR_STATE_LINE; // off time after index to start time
-			break;
-		case ISR_STATE_LINE:
-			WRITETIMER1(V.l_width);
-			if (!L_ptr->sequence.skip) {
-				if (L_ptr->sequence.R)
-					R_OUT = 1;
-				if (L_ptr->sequence.G)
-					G_OUT = 1;
-				if (L_ptr->sequence.B)
-					B_OUT = 1;
-			}
-
-			V.l_state = ISR_STATE_WAIT; // on start time duration for strobe pulse
-			break;
-		case ISR_STATE_WAIT: // waiting for next HALL sensor pulse
-		default:
-			T1CONbits.TMR1ON = 0; // idle timer
-			G_OUT = 0; // blank RGB
-			R_OUT = 0;
-			B_OUT = 0;
-			break;
-		}
-	}
-
-	// remote command data buffer
-	if (PIR1bits.RCIF) { // is data from RS-232 port
-		V.rx_data = RCREG; // save in state machine register
-		if (RCSTAbits.OERR) {
-			RCSTAbits.CREN = 0; // clear overrun
-			RCSTAbits.CREN = 1; // re-enable
-		}
-		ringBufS_put(&ring_buf1, V.rx_data); // buffer RS232 data
-	}
-
-	// check timer0 for blinker led
-	if (INTCONbits.TMR0IF) {
-		INTCONbits.TMR0IF = false;
-		WRITETIMER0(TIMEROFFSET);
-		LED5 = ~LED5; // active LED blinker
-	}
-	LED1 = 0;
-}
 
 void uitoa(uint8_t * Buffer, uint16_t Value)
 {
@@ -234,7 +160,7 @@ int16_t sw_work(void)
 	static uint8_t *L_tmp_ptr;
 
 	static union L_union_type { // so we can access each byte of the command structure
-		uint8_t L_bytes[sizeof(L[0]) + 1];
+		uint8_t L_bytes[sizeof(L0[0]) + 1];
 		L_data L_tmp;
 	} L_union;
 	int16_t ret = 0;
@@ -309,6 +235,18 @@ int16_t sw_work(void)
 				break;
 			}
 			offset = 0;
+			/*
+			 * swap working buffer into pointer for updates
+			 */
+
+			switch (V.l_buffer) {
+			case 0:
+				L_ptr_buf = &L1[position]; // select line strobes data 1
+				break;
+			default:
+				L_ptr_buf = &L0[position]; // select line strobes data 0
+				break;
+			}
 			switch (V.comm_state) {
 			case APP_STATE_WAIT_FOR_UDATA:
 				V.comm_state = APP_STATE_WAIT_FOR_RDATA;
@@ -318,13 +256,13 @@ int16_t sw_work(void)
 				break;
 			case APP_STATE_WAIT_FOR_eDATA:
 				INTCONbits.GIEH = 0;
-				L[position].sequence.end = 0; // clear end flag
+				L_ptr_buf->sequence.end = 0; // clear end flag
 				INTCONbits.GIEH = 1;
 				V.comm_state = APP_STATE_WAIT_FOR_SDATA;
 				break;
 			case APP_STATE_WAIT_FOR_EDATA:
 				INTCONbits.GIEH = 0;
-				L[position].sequence.end = 1; // set end flag
+				L_ptr_buf->sequence.end = 1; // set end flag
 				INTCONbits.GIEH = 1;
 				V.comm_state = APP_STATE_WAIT_FOR_SDATA;
 				break;
@@ -338,7 +276,7 @@ int16_t sw_work(void)
 			offset++;
 			if (offset >= sizeof(L_union.L_tmp)) {
 				INTCONbits.GIEH = 0;
-				L[position] = L_union.L_tmp;
+				*L_ptr_buf = L_union.L_tmp;
 				INTCONbits.INT0IF = false;
 				INTCONbits.GIEH = 1;
 				USART_putsr(" OK,");
@@ -349,7 +287,7 @@ int16_t sw_work(void)
 			}
 			break;
 		case APP_STATE_WAIT_FOR_SDATA: // send
-			L_tmp_ptr = (void*) &L[position]; // set array start position
+			L_tmp_ptr = (void*) L_ptr_buf; // set array start position
 			do { // send ascii data to the rs232 port
 				USART_putsr(" ,");
 				if (offset) {
@@ -416,8 +354,10 @@ uint8_t init_hov_params(void)
 	if (V.boot_code)
 		USART_putsr(", dirty boot");
 
-	L_ptr = &L[0];
-	L[strobe_max - 1].sequence.end = 1;
+	L_ptr = &L0[0];
+	L_ptr_buf = &L1[0];
+	L0[strobe_max - 1].sequence.end = 1;
+	L1[strobe_max - 1].sequence.end = 1;
 
 	return 0;
 }
