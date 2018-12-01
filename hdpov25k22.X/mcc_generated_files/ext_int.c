@@ -38,13 +38,13 @@
 
 void (*INT0_InterruptHandler)(void);
 extern struct V_data V;
-extern struct L_data L0[strobe_max], L1[strobe_max], *L_ptr;
+extern struct L_data L0[strobe_max], L1[strobe_max], *L_ptr, *L_ptr_next;
 
 void INT0_ISR(void)
 {
 	EXT_INT0_InterruptFlagClear();
 
-	// Callback function gets called everytime this ISR executes
+	// Callback function gets called every time this ISR executes
 	INT0_CallBack();
 }
 
@@ -88,13 +88,18 @@ void INT0_DefaultInterruptHandler(void)
 	}
 	V.l_state = ISR_STATE_FLAG; // restart lamp flashing sequence, off time
 
-	switch (V.l_buffer) {
-	case 0:
-		L_ptr = &L0[V.line_num]; // select line strobes data 0
-		break;
-	default:
-		L_ptr = &L1[V.line_num]; // select line strobes data 1
-		break;
+	/* interlock the main program updates and pointer updates */
+	if (V.update_array) {
+		switch (V.l_buffer) {
+		case 0:
+			L_ptr = &L0[V.line_num]; // select line strobes data 0
+			L_ptr_next = &L1[0];
+			break;
+		default:
+			L_ptr = &L1[V.line_num]; // select line strobes data 1
+			L_ptr_next = &L0[0];
+			break;
+		}
 	}
 
 	V.rotations++;
@@ -115,6 +120,7 @@ void INT0_DefaultInterruptHandler(void)
 	V.line_num++;
 	if (L_ptr->sequence.end || (V.line_num >= strobe_max)) { // rollover for sequence patterns
 		V.line_num = 0;
+		V.update_array = true;
 		V.sequences++;
 	}
 

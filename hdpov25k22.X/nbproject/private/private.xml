@@ -5,6 +5,7 @@
         <group>
             <file>file:/root/25k22_hd_pov/hdpov25k22.X/pov_mon.c</file>
             <file>file:/root/25k22_hd_pov/hdpov25k22.X/pov_mon.h</file>
+            <file>file:/root/25k22_hd_pov/hdpov25k22.X/mcc_generated_files/tmr1.c</file>
             <file>file:/root/25k22_hd_pov/hdpov25k22.X/main.c</file>
             <file>file:/root/25k22_hd_pov/hdpov25k22.X/mcc_generated_files/ext_int.c</file>
             <file>file:/root/25k22_hd_pov/hdpov25k22.X/mcc_generated_files/interrupt_manager.c</file>

@@ -11,6 +11,7 @@
 int16_t sw_work(void);
 void init_povmon(void);
 uint8_t init_hov_params(void);
+bool scan_update(struct L_data *, uint8_t);
 
 /* line strobes in 16-bit timer values for spacing */
 /* for an interrupt driven state machine */
@@ -52,7 +53,7 @@ struct L_data L0[strobe_max] = {
 		.sequence.offset = 0,
 		.sequence.end = true,
 	}
-}, *L_ptr, *L_ptr_buf,
+}, *L_ptr, *L_ptr_next, *L_ptr_buf,
 	L1[strobe_max] = {
 	{
 		.strobe = z_offset - d_count,
@@ -151,6 +152,44 @@ void puts_ok(uint16_t size)
 	uitoa(V.str, size);
 	USART_putsr("\r\n OK");
 	USART_puts(V.str); // send size of data array
+}
+
+/*
+ * pointer to the array of strobe data that needs to be updated
+ * symbol is the pattern to de displayed on the disk
+ * return true when update flag from interrupt is set
+ */
+bool scan_update(struct L_data * L, uint8_t symbol)
+{
+	bool r = 0, g = 0, b = 0, a = 0;
+	struct L_data *scan = L;
+
+	if (!V.update_array)
+		return false;
+
+	switch (symbol) {
+	case 1:
+		r = 1;
+		g = 1;
+		b = 1;
+		a = 1;
+		break;
+	default:
+		break;
+	}
+
+	scan->sequence.R = r;
+	scan++;
+	scan->sequence.G = g;
+	scan++;
+	scan->sequence.B = b;
+	scan++;
+	scan->sequence.A = a;
+
+	V.update_array = false; // lock buffer switch until sequence is complete
+	V.l_buffer = ~V.l_buffer; // switch line buffer selector
+
+	return true;
 }
 
 /* main loop work routine */
@@ -355,6 +394,7 @@ uint8_t init_hov_params(void)
 		USART_putsr(", dirty boot");
 
 	L_ptr = &L0[0];
+	L_ptr_next = &L1[0];
 	L_ptr_buf = &L1[0];
 	L0[strobe_max - 1].sequence.end = 1;
 	L1[strobe_max - 1].sequence.end = 1;
