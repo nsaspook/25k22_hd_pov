@@ -7,6 +7,7 @@
 #include "pov_mon.h"
 #include <string.h>
 #include "ringbufs.h"
+#include "symbols.h"
 
 int16_t sw_work(void);
 void init_povmon(void);
@@ -33,13 +34,13 @@ struct S_seq S = {
 struct L_data L0[strobe_max] = {
 	{
 		.strobe = z_offset - d_count,
-		.sequence.G = true,
+		.sequence.R = true,
 		.sequence.offset = 0,
 		.sequence.end = false,
 	},
 	{
 		.strobe = z_offset - s_count,
-		.sequence.R = true,
+		.sequence.G = true,
 		.sequence.offset = 0,
 	},
 	{
@@ -57,13 +58,13 @@ struct L_data L0[strobe_max] = {
 	L1[strobe_max] = {
 	{
 		.strobe = z_offset - d_count,
-		.sequence.G = true,
+		.sequence.R = true,
 		.sequence.offset = 0,
 		.sequence.end = false,
 	},
 	{
 		.strobe = z_offset - s_count,
-		.sequence.R = false,
+		.sequence.G = false,
 		.sequence.offset = 0,
 	},
 	{
@@ -90,6 +91,7 @@ struct V_data V = {
 	.l_full = strobe_limit_l,
 	.l_width = strobe_line,
 	.l_buffer = 0,
+	.s_state = SEQ_STATE_INIT,
 };
 
 
@@ -161,40 +163,27 @@ void puts_ok(uint16_t size)
  */
 bool scan_update(struct L_data * L, uint8_t symbol)
 {
-	bool r = 0, g = 0, b = 0, a = 0;
 	struct L_data *scan = L;
 
 	if (V.update_sequence)
 		return false;
 
-	switch (symbol) {
-	case 1:
-		r = 1;
-		g = 1;
-		b = 1;
-		a = 1;
-		break;
-	default:
-		break;
-	}
-
-	scan->sequence.R = r;
+	scan->sequence.R = s_array[symbol]&1;
 	scan++;
-	scan->sequence.G = g;
+	scan->sequence.G = s_array[symbol] >> 1 & 1;
 	scan++;
-	scan->sequence.B = b;
+	scan->sequence.B = s_array[symbol] >> 2 & 1;
 	scan++;
-	scan->sequence.A = a;
+	scan->sequence.A = s_array[symbol] >> 3 & 1;
 
 	V.update_sequence = true; // flag buffer switch when sequence is complete
-
 	return true;
 }
 
 /* main loop work routine */
 int16_t sw_work(void)
 {
-	static uint8_t position = 0, offset = 0, rx_data;
+	static uint8_t position = 0, offset = 0, rx_data, symbol = 0;
 	static uint8_t *L_tmp_ptr;
 
 	static union L_union_type { // so we can access each byte of the command structure
@@ -214,6 +203,33 @@ int16_t sw_work(void)
 		USART_putsr(" strobe,");
 		uitoa(V.str, L_ptr->strobe);
 		USART_puts(V.str);
+	}
+
+	switch (V.s_state) {
+	case SEQ_STATE_INIT:
+		V.s_state = SEQ_STATE_SET;
+		break;
+	case SEQ_STATE_SET:
+		V.soft_timer0 = false;
+		V.s_state = SEQ_STATE_TRIGGER;
+		break;
+	case SEQ_STATE_TRIGGER:
+		if (V.soft_timer0 && scan_update(L_ptr_next, symbol)) {
+			V.s_state = SEQ_STATE_DONE;
+			LED6 = ~LED6;
+		}
+		break;
+	case SEQ_STATE_DONE:
+		symbol++;
+		if (symbol >= MAX_SYMBOL)
+			symbol = 0;
+		V.s_state = SEQ_STATE_SET;
+		break;
+	case SEQ_STATE_ERROR:
+	default:
+		V.s_state = SEQ_STATE_INIT;
+		symbol = 0;
+		break;
 	}
 
 	/* command state machine 

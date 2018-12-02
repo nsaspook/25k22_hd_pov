@@ -28,11 +28,23 @@ typedef enum {
 
 } ISR_STATES;
 
+typedef enum {
+	/* rotation state machine */
+	SEQ_STATE_INIT = 0,
+	SEQ_STATE_SET,
+	SEQ_STATE_TRIGGER,
+	SEQ_STATE_DONE,
+	SEQ_STATE_ERROR
+
+} SEQ_STATES;
+
 typedef struct V_data { // control data structure with possible volatile issues
 	APP_STATES comm_state;
+	SEQ_STATES s_state;
 	volatile ISR_STATES l_state;
 	uint8_t boot_code : 1;
-	volatile uint8_t line_num : 2, l_buffer : 1, update_array : 1, update_sequence :1;
+	volatile uint8_t line_num : 2, l_buffer : 1, update_array : 1, update_sequence : 1,
+	soft_timer0 : 1;
 	volatile uint8_t rx_data;
 	uint16_t l_size;
 	volatile uint16_t rotations, sequences, rpm_counts, rpm_counts_prev;
@@ -84,8 +96,8 @@ typedef volatile struct L_data {
 #define LED5		LATAbits.LATA6
 #define LED6		LATAbits.LATA7		
 
-#define G_OUT		LATAbits.LATA0
-#define R_OUT		LATAbits.LATA1
+#define G_OUT		LATAbits.LATA1
+#define R_OUT		LATAbits.LATA0
 #define B_OUT		LATAbits.LATA2
 #define A_OUT		LATAbits.LATA3
 #define BLINKLED	LATBbits.LATB5
@@ -116,4 +128,6 @@ typedef volatile struct L_data {
 #define z_offset	59920	//62350
 #define s_count		8325
 #define d_count		0	//3800
+
+#define MAX_SYMBOL	16
 #endif 

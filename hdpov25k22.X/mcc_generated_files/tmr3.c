@@ -50,6 +50,7 @@
 #include <xc.h>
 #include "tmr3.h"
 #include "../pov_mon.h"
+extern struct V_data V;
 
 /**
   Section: Global Variable Definitions
@@ -188,6 +189,7 @@ void TMR3_DefaultInterruptHandler(void)
 	// add your TMR3 interrupt custom code
 	// or set custom function using TMR3_SetInterruptHandler()
 	BLINKLED = ~BLINKLED;
+	V.soft_timer0 = true;
 }
 
 
