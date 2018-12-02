@@ -59,7 +59,7 @@
 
 #endif
 
-#define TMR3_INTERRUPT_TICKER_FACTOR    100
+#define TMR3_INTERRUPT_TICKER_FACTOR    50
 
 /**
   Section: TMR3 APIs
