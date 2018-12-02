@@ -129,5 +129,5 @@ typedef volatile struct L_data {
 #define s_count		8325
 #define d_count		0	//3800
 
-#define MAX_SYMBOL	16
+#define MAX_SYMBOL	32
 #endif 
