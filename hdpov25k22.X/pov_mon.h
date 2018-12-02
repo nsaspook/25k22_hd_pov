@@ -32,7 +32,7 @@ typedef struct V_data { // control data structure with possible volatile issues
 	APP_STATES comm_state;
 	volatile ISR_STATES l_state;
 	uint8_t boot_code : 1;
-	volatile uint8_t line_num : 2, l_buffer : 1, update_array : 1;
+	volatile uint8_t line_num : 2, l_buffer : 1, update_array : 1, update_sequence :1;
 	volatile uint8_t rx_data;
 	uint16_t l_size;
 	volatile uint16_t rotations, sequences, rpm_counts, rpm_counts_prev;

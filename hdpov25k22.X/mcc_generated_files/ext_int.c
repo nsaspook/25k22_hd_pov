@@ -88,20 +88,23 @@ void INT0_DefaultInterruptHandler(void)
 	}
 	V.l_state = ISR_STATE_FLAG; // restart lamp flashing sequence, off time
 
-	/* interlock the main program updates and pointer updates */
-	if (V.update_array) {
-		switch (V.l_buffer) {
-		case 0:
-			L_ptr = &L0[V.line_num]; // select line strobes data 0
-			L_ptr_next = &L1[0];
-			break;
-		default:
-			L_ptr = &L1[V.line_num]; // select line strobes data 1
-			L_ptr_next = &L0[0];
-			break;
-		}
+	/* interlock the main program updates and pointer updates at sequence end */
+	if (V.update_array && V.update_sequence) {
+		V.update_sequence = false;
+		V.l_buffer = ~V.l_buffer; // switch line buffer selector
 	}
+	V.update_array = false;
 
+	switch (V.l_buffer) {
+	case 0:
+		L_ptr = &L0[V.line_num]; // select line strobes data 0
+		L_ptr_next = &L1[0];
+		break;
+	default:
+		L_ptr = &L1[V.line_num]; // select line strobes data 1
+		L_ptr_next = &L0[0];
+		break;
+	}
 	V.rotations++;
 
 	/* limit rotational timer values during offsets */

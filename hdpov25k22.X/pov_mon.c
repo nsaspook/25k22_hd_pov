@@ -164,7 +164,7 @@ bool scan_update(struct L_data * L, uint8_t symbol)
 	bool r = 0, g = 0, b = 0, a = 0;
 	struct L_data *scan = L;
 
-	if (!V.update_array)
+	if (V.update_sequence)
 		return false;
 
 	switch (symbol) {
@@ -186,8 +186,7 @@ bool scan_update(struct L_data * L, uint8_t symbol)
 	scan++;
 	scan->sequence.A = a;
 
-	V.update_array = false; // lock buffer switch until sequence is complete
-	V.l_buffer = ~V.l_buffer; // switch line buffer selector
+	V.update_sequence = true; // flag buffer switch when sequence is complete
 
 	return true;
 }
