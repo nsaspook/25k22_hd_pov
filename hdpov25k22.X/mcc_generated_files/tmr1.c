@@ -206,7 +206,6 @@ void TMR1_DefaultInterruptHandler(void)
 				B_OUT = 1;
 			if (L_ptr->sequence.A)
 				A_OUT = 1;
-
 		}
 
 		V.l_state = ISR_STATE_WAIT; // on start time duration for strobe pulse
