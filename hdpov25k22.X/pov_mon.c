@@ -33,23 +33,23 @@ struct S_seq S = {
  */
 struct L_data L0[strobe_max] = {
 	{
-		.strobe = z_offset - d_count,
+		.strobe = S0,
 		.sequence.R = true,
 		.sequence.offset = 0,
 		.sequence.end = false,
 	},
 	{
-		.strobe = z_offset - s_count,
+		.strobe = S1,
 		.sequence.G = true,
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = (z_offset - d_count) - s_count * 2,
+		.strobe = S2,
 		.sequence.B = true,
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = z_offset - s_count * 3,
+		.strobe = S3,
 		.sequence.A = true,
 		.sequence.offset = 0,
 		.sequence.end = true,
@@ -57,29 +57,28 @@ struct L_data L0[strobe_max] = {
 }, *L_ptr, *L_ptr_next, *L_ptr_buf,
 	L1[strobe_max] = {
 	{
-		.strobe = z_offset - d_count,
+		.strobe = S0,
 		.sequence.R = true,
 		.sequence.offset = 0,
 		.sequence.end = false,
 	},
 	{
-		.strobe = z_offset - s_count,
+		.strobe = S1,
 		.sequence.G = false,
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = (z_offset - d_count) - s_count * 2,
+		.strobe = S2,
 		.sequence.B = true,
 		.sequence.offset = 0,
 	},
 	{
-		.strobe = z_offset - s_count * 3,
+		.strobe = S3,
 		.sequence.A = false,
 		.sequence.offset = 0,
 		.sequence.end = true,
 	}
-}
-;
+};
 
 struct V_data V = {
 	.rpm_overflow = true,

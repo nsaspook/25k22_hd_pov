@@ -125,9 +125,14 @@ typedef volatile struct L_data {
 #define strobe_line	65200 // line width timer count
 #define strobe_max	16
 
-#define z_offset	59920	//62350
-#define s_count		8325
-#define d_count		0	//3800
+#define z_offset	59920	// offset to first led
+#define s_count		8325	// offset to next led
+#define d_count		0	// 3800 alt light aperature
+
+#define	S0	z_offset	
+#define	S1	z_offset - s_count
+#define	S2	z_offset - s_count * 2
+#define	S3	z_offset - s_count * 3
 
 #define MAX_SYMBOL	32
 #endif 
