@@ -71,6 +71,7 @@ typedef volatile struct S_seq {
 	uint16_t slot_count; // counts to next led position
 	uint16_t disk_count;
 	uint16_t disk_slot_count, disk_next_count;
+	uint16_t s0, s1, s2, s3;
 } S_seq;
 
 /* data for one complete rotation*/
@@ -127,7 +128,7 @@ typedef volatile struct L_data {
 
 #define z_offset	59920	// offset to first led
 #define s_count		8325	// offset to next led
-#define d_count		0	// 3800 alt light aperature
+#define d_count		0	// 3800 alt light aper
 
 #define	S0	z_offset	
 #define	S1	z_offset - s_count

@@ -93,8 +93,6 @@ struct V_data V = {
 	.s_state = SEQ_STATE_INIT,
 };
 
-
-
 /* RS232 command buffer */
 struct ringBufS_t ring_buf1;
 
@@ -167,12 +165,16 @@ bool scan_update(struct L_data * L, uint8_t symbol)
 	if (V.update_sequence)
 		return false;
 
+	scan->strobe = S.s0;
 	scan->sequence.R = s_array[symbol]&1;
 	scan++;
+	scan->strobe = S.s1;
 	scan->sequence.G = s_array[symbol] >> 1 & 1;
 	scan++;
+	scan->strobe = S.s2;
 	scan->sequence.B = s_array[symbol] >> 2 & 1;
 	scan++;
+	scan->strobe = S.s3;
 	scan->sequence.A = s_array[symbol] >> 3 & 1;
 
 	V.update_sequence = true; // flag buffer switch when sequence is complete
@@ -193,6 +195,16 @@ int16_t sw_work(void)
 
 	if (V.l_state != ISR_STATE_DONE)
 		ret = -1;
+
+	if (V.rpm_update) {
+
+		S.s0 = S.zero_offset;
+		S.s1 = S.zero_offset - S.slot_count;
+		S.s2 = S.zero_offset - S.slot_count * 2;
+		S.s3 = S.zero_offset - S.slot_count * 3;
+
+		V.rpm_update = false;
+	}
 
 	if (!SW1) {
 		USART_putsr("\r\n RPM counts,");
@@ -412,7 +424,10 @@ uint8_t init_hov_params(void)
 	L_ptr_buf = &L1[0];
 	L0[strobe_max - 1].sequence.end = 1;
 	L1[strobe_max - 1].sequence.end = 1;
-
+	S.s0 = z_offset;
+	S.s1 = z_offset - s_count;
+	S.s2 = z_offset - s_count * 2;
+	S.s3 = z_offset - s_count * 3;
 	return 0;
 }
 
