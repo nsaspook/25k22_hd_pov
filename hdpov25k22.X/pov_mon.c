@@ -428,6 +428,7 @@ uint8_t init_hov_params(void)
 	S.s1 = z_offset - s_count;
 	S.s2 = z_offset - s_count * 2;
 	S.s3 = z_offset - s_count * 3;
+	S.zero_frac = (65534.0 - (float) S.zero_offset) / 33300.0;
 	return 0;
 }
 

@@ -1,6 +1,8 @@
 #ifndef PAT_H_INCLUDED
 #define PAT_H_INCLUDED 
 
+#include <math.h>
+
 void init_povmon(void);
 int16_t sw_work(void);
 
@@ -72,6 +74,8 @@ typedef volatile struct S_seq {
 	uint16_t disk_count;
 	uint16_t disk_slot_count, disk_next_count;
 	uint16_t s0, s1, s2, s3;
+	float	zero_frac;
+	float	slot_frac;
 } S_seq;
 
 /* data for one complete rotation*/
