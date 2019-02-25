@@ -182,7 +182,7 @@ void TMR1_DefaultInterruptHandler(void)
 {
 	// add your TMR1 interrupt custom code
 	// or set custom function using TMR1_SetInterruptHandler()
-	// line RGB pulsing state machine using current lines pointer
+	// line slot pulsing state machine using current lines pointer
 
 	switch (V.l_state) {
 	case ISR_STATE_FLAG:
@@ -214,7 +214,7 @@ void TMR1_DefaultInterruptHandler(void)
 	case ISR_STATE_DONE:
 	default:
 		T1CONbits.TMR1ON = 0; // idle timer
-		G_OUT = 0; // blank RGB
+		G_OUT = 0; // blank all slots
 		R_OUT = 0;
 		B_OUT = 0;
 		A_OUT = 0;

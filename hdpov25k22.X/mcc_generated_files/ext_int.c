@@ -127,7 +127,7 @@ void INT0_DefaultInterruptHandler(void)
 		V.sequences++;
 	}
 
-	// start line RGB pulsing state machine using current lines pointer
+	// start line slot pulsing state machine using current lines pointer
 	WRITETIMER1(L_ptr->strobe); // strobe positioning during rotation
 	T1CONbits.TMR1ON = 1;
 	G_OUT = 0;
