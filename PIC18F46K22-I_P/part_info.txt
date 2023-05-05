@@ -1,0 +1,9 @@
+Manufacturer=Microchip
+PartNumber=PIC18F46K22-I/P
+PartCategory=Integrated Circuit
+PackageCategory=Dual-In-Line Packages
+PinCount=40
+Version=3.1
+Released=2015-11-02 09:44:16
+Downloaded=2023-05-05 20:19:16
+3D=Y

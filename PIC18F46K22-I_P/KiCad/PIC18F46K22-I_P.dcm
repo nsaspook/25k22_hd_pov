@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP PIC18F46K22-I_P
+D 40-Pin, Low-Power, High-Performance Microcontrollers with XLP Technology
+K
+F https://datasheet.datasheetarchive.com/originals/distributors/Datasheets-DGA18/353826.pdf
+$ENDCMP
+#
+#End Doc Library

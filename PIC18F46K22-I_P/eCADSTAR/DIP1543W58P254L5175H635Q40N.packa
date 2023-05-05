@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "PIC18F46K22-I_P"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2019-10-01-15:30:52)
+    (mountForm default
+        (footprintRef "DIP1543W58P254L5175H635Q40N")
+        (spec "System")
+    )
+)
