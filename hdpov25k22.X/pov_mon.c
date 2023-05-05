@@ -96,7 +96,7 @@ struct V_data V = {
 /* RS232 command buffer */
 struct ringBufS_t ring_buf1;
 
-const char build_date[] = __DATE__, build_time[] = __TIME__, versions[] = "2.00";
+const char build_date[] = __DATE__, build_time[] = __TIME__, versions[] = "K45";
 // const uint16_t TIMEROFFSET = 18000, TIMERDEF = 60000;
 
 void uitoa(uint8_t * Buffer, uint16_t Value)

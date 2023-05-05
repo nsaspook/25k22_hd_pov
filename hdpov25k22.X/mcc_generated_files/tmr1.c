@@ -14,7 +14,7 @@
     This source file provides APIs for TMR1.
     Generation Information :
 	Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.65
-	Device            :  PIC18F25K22
+        Device            :  PIC18F45K22
 	Driver Version    :  2.00
     The generated drivers are tested against the following:
 	Compiler          :  XC8 1.45
@@ -84,7 +84,7 @@ void TMR1_Initialize(void)
 	TMR1L = 0x88;
 
 	// Load the TMR value to reload variable
-	timer1ReloadVal = TMR1;
+    timer1ReloadVal=TMR1;
 
 	// Clearing IF flag before enabling the interrupt.
 	PIR1bits.TMR1IF = 0;
@@ -122,14 +122,15 @@ uint16_t TMR1_ReadTimer(void)
 	readValLow = TMR1L;
 	readValHigh = TMR1H;
 
-	readVal = ((uint16_t) readValHigh << 8) | readValLow;
+    readVal = ((uint16_t)readValHigh << 8) | readValLow;
 
 	return readVal;
 }
 
 void TMR1_WriteTimer(uint16_t timerVal)
 {
-	if (T1CONbits.T1SYNC == 1) {
+    if (T1CONbits.T1SYNC == 1)
+    {
 		// Stop the Timer by writing to TMRxON bit
 		T1CONbits.TMR1ON = 0;
 
@@ -138,8 +139,10 @@ void TMR1_WriteTimer(uint16_t timerVal)
 		TMR1L = (uint8_t) timerVal;
 
 		// Start the Timer after writing to the register
-		T1CONbits.TMR1ON = 1;
-	} else {
+        T1CONbits.TMR1ON =1;
+    }
+    else
+    {
 		// Write to the Timer1 register
 		TMR1H = (timerVal >> 8);
 		TMR1L = (uint8_t) timerVal;
@@ -168,18 +171,18 @@ void TMR1_ISR(void)
 	PIR1bits.TMR1IF = 0;
 	TMR1_WriteTimer(timer1ReloadVal);
 
-	if (TMR1_InterruptHandler) {
+    if(TMR1_InterruptHandler)
+    {
 		TMR1_InterruptHandler();
 	}
 }
 
-void TMR1_SetInterruptHandler(void (* InterruptHandler)(void))
-{
+
+void TMR1_SetInterruptHandler(void (* InterruptHandler)(void)){
 	TMR1_InterruptHandler = InterruptHandler;
 }
 
-void TMR1_DefaultInterruptHandler(void)
-{
+void TMR1_DefaultInterruptHandler(void){
 	// add your TMR1 interrupt custom code
 	// or set custom function using TMR1_SetInterruptHandler()
 	// line slot pulsing state machine using current lines pointer

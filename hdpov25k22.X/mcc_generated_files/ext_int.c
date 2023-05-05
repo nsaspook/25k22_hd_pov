@@ -14,7 +14,7 @@
      This source file provides implementations for driver APIs for EXT_INT.
      Generation Information :
 	 Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.65
-	 Device            :  PIC18F25K22
+         Device            :  PIC18F45K22
 	 Driver Version    :  1.00
      The generated drivers are tested against the following:
 	 Compiler          :  XC8 1.45

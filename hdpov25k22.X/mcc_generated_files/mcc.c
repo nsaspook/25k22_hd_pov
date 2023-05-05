@@ -14,7 +14,7 @@
     This header file provides implementations for driver APIs for all modules selected in the GUI.
     Generation Information :
         Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.65
-        Device            :  PIC18F25K22
+        Device            :  PIC18F45K22
         Driver Version    :  2.00
     The generated drivers are tested against the following:
         Compiler          :  XC8 1.45 or later
@@ -48,7 +48,7 @@
 // CONFIG1H
 #pragma config FOSC = INTIO67    // Oscillator Selection bits->Internal oscillator block
 #pragma config PLLCFG = OFF    // 4X PLL Enable->Oscillator used directly
-#pragma config PRICLKEN = ON    // Primary clock enable bit->Primary clock enabled
+#pragma config PRICLKEN = ON    // Primary clock enable bit->Primary clock is always enabled
 #pragma config FCMEN = OFF    // Fail-Safe Clock Monitor Enable bit->Fail-Safe Clock Monitor disabled
 #pragma config IESO = OFF    // Internal/External Oscillator Switchover bit->Oscillator Switchover mode disabled
 
@@ -67,7 +67,7 @@
 #pragma config CCP3MX = PORTB5    // P3A/CCP3 Mux bit->P3A/CCP3 input/output is multiplexed with RB5
 #pragma config HFOFST = ON    // HFINTOSC Fast Start-up->HFINTOSC output and ready status are not delayed by the oscillator stable status
 #pragma config T3CMX = PORTC0    // Timer3 Clock input mux bit->T3CKI is on RC0
-#pragma config P2BMX = PORTB5    // ECCP2 B output mux bit->P2B is on RB5
+#pragma config P2BMX = PORTD2    // ECCP2 B output mux bit->P2B is on RD2
 #pragma config MCLRE = EXTMCLR    // MCLR Pin Enable bit->MCLR pin enabled, RE3 input pin disabled
 
 // CONFIG4L

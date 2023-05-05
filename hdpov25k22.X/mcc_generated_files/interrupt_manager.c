@@ -16,7 +16,7 @@
     all modules selected in the GUI.
     Generation Information :
 	Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.65
-	Device            :  PIC18F25K22
+        Device            :  PIC18F45K22
 	Driver Version    :  1.02
     The generated drivers are tested against the following:
 	Compiler          :  XC8 1.45 or later
@@ -77,13 +77,16 @@ void __interrupt(high_priority) INTERRUPT_InterruptManagerHigh(void)
 {
 	LED2 = 1;
 	// interrupt handler
-	if (INTCONbits.INT0IE == 1 && INTCONbits.INT0IF == 1) {
+    if(INTCONbits.INT0IE == 1 && INTCONbits.INT0IF == 1)
+    {
 		INT0_ISR();
 	}
-	if (PIE1bits.RC1IE == 1 && PIR1bits.RC1IF == 1) {
+    if(PIE1bits.RC1IE == 1 && PIR1bits.RC1IF == 1)
+    {
 		EUSART1_Receive_ISR();
 	}
-	if (PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1) {
+    if(PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1)
+    {
 		TMR1_ISR();
 	}
 	LED2 = 0;
@@ -93,10 +96,12 @@ void __interrupt(low_priority) INTERRUPT_InterruptManagerLow(void)
 {
 	LED2 = ~LED2;
 	// interrupt handler
-	if (PIE2bits.TMR3IE == 1 && PIR2bits.TMR3IF == 1) {
+    if(PIE2bits.TMR3IE == 1 && PIR2bits.TMR3IF == 1)
+    {
 		TMR3_ISR();
 	}
-	if (PIE5bits.TMR5IE == 1 && PIR5bits.TMR5IF == 1) {
+    if(PIE5bits.TMR5IE == 1 && PIR5bits.TMR5IF == 1)
+    {
 		TMR5_ISR();
 	}
 	LED2 = ~LED2;

@@ -14,7 +14,7 @@
     This header file provides implementations for pin APIs for all pins selected in the GUI.
     Generation Information :
         Product Revision  :  MPLAB(c) Code Configurator - 4.85.1
-        Device            :  PIC18F25K22
+        Device            :  PIC18F45K22
         Version           :  1.01
     The generated drivers are tested against the following:
         Compiler          :  XC8 1.35
@@ -260,6 +260,16 @@
 #define RC7_SetDigitalOutput()  do { TRISCbits.TRISC7 = 0; } while(0)
 #define RC7_SetAnalogMode() do { ANSELCbits.ANSC7 = 1; } while(0)
 #define RC7_SetDigitalMode()do { ANSELCbits.ANSC7 = 0; } while(0)
+
+// get/set RD1 procedures
+#define RD1_SetHigh()    do { LATDbits.LATD1 = 1; } while(0)
+#define RD1_SetLow()   do { LATDbits.LATD1 = 0; } while(0)
+#define RD1_Toggle()   do { LATDbits.LATD1 = ~LATDbits.LATD1; } while(0)
+#define RD1_GetValue()         PORTDbits.RD1
+#define RD1_SetDigitalInput()   do { TRISDbits.TRISD1 = 1; } while(0)
+#define RD1_SetDigitalOutput()  do { TRISDbits.TRISD1 = 0; } while(0)
+#define RD1_SetAnalogMode() do { ANSELDbits.ANSD1 = 1; } while(0)
+#define RD1_SetDigitalMode()do { ANSELDbits.ANSD1 = 0; } while(0)
 
 /**
    @Param

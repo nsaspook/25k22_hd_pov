@@ -14,7 +14,7 @@
     This source file provides APIs for TMR3.
     Generation Information :
 	Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.65
-	Device            :  PIC18F25K22
+        Device            :  PIC18F45K22
 	Driver Version    :  2.00
     The generated drivers are tested against the following:
 	Compiler          :  XC8 1.45
@@ -76,7 +76,7 @@ void TMR3_Initialize(void)
 	TMR3L = 0xE0;
 
 	// Load the TMR value to reload variable
-	timer3ReloadVal = TMR3;
+    timer3ReloadVal=TMR3;
 
 	// Clearing IF flag before enabling the interrupt.
 	PIR2bits.TMR3IF = 0;
@@ -114,14 +114,15 @@ uint16_t TMR3_ReadTimer(void)
 	readValLow = TMR3L;
 	readValHigh = TMR3H;
 
-	readVal = ((uint16_t) readValHigh << 8) | readValLow;
+    readVal = ((uint16_t)readValHigh << 8) | readValLow;
 
 	return readVal;
 }
 
 void TMR3_WriteTimer(uint16_t timerVal)
 {
-	if (T3CONbits.nT3SYNC == 1) {
+    if (T3CONbits.nT3SYNC == 1)
+    {
 		// Stop the Timer by writing to TMRxON bit
 		T3CONbits.TMR3ON = 0;
 
@@ -130,8 +131,10 @@ void TMR3_WriteTimer(uint16_t timerVal)
 		TMR3L = (uint8_t) timerVal;
 
 		// Start the Timer after writing to the register
-		T3CONbits.TMR3ON = 1;
-	} else {
+        T3CONbits.TMR3ON =1;
+    }
+    else
+    {
 		// Write to the Timer3 register
 		TMR3H = (timerVal >> 8);
 		TMR3L = (uint8_t) timerVal;
@@ -161,8 +164,9 @@ void TMR3_ISR(void)
 	PIR2bits.TMR3IF = 0;
 	TMR3_WriteTimer(timer3ReloadVal);
 
-	// callback function - called every 100th pass
-	if (++CountCallBack >= TMR3_INTERRUPT_TICKER_FACTOR) {
+    // callback function - called every 50th pass
+    if (++CountCallBack >= TMR3_INTERRUPT_TICKER_FACTOR)
+    {
 		// ticker function call
 		TMR3_CallBack();
 
@@ -174,18 +178,17 @@ void TMR3_ISR(void)
 void TMR3_CallBack(void)
 {
 	// Add your custom callback code here
-	if (TMR3_InterruptHandler) {
+    if(TMR3_InterruptHandler)
+    {
 		TMR3_InterruptHandler();
 	}
 }
 
-void TMR3_SetInterruptHandler(void (* InterruptHandler)(void))
-{
+void TMR3_SetInterruptHandler(void (* InterruptHandler)(void)){
 	TMR3_InterruptHandler = InterruptHandler;
 }
 
-void TMR3_DefaultInterruptHandler(void)
-{
+void TMR3_DefaultInterruptHandler(void){
 	// add your TMR3 interrupt custom code
 	// or set custom function using TMR3_SetInterruptHandler()
 	BLINKLED = ~BLINKLED;
