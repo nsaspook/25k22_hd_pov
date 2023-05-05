@@ -16,7 +16,7 @@
     all modules selected in the GUI.
     Generation Information :
 	Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.65
-        Device            :  PIC18F45K22
+        Device            :  PIC18F46K22
 	Driver Version    :  1.02
     The generated drivers are tested against the following:
 	Compiler          :  XC8 1.45 or later

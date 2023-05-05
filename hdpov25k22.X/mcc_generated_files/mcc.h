@@ -14,7 +14,7 @@
     This header file provides implementations for driver APIs for all modules selected in the GUI.
     Generation Information :
         Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.65
-        Device            :  PIC18F45K22
+        Device            :  PIC18F46K22
         Driver Version    :  2.00
     The generated drivers are tested against the following:
         Compiler          :  XC8 1.45 or later
@@ -50,11 +50,11 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "interrupt_manager.h"
-#include "tmr5.h"
 #include "ccp4.h"
+#include "tmr5.h"
 #include "tmr3.h"
-#include "tmr1.h"
 #include "ext_int.h"
+#include "tmr1.h"
 #include "eusart1.h"
 
 #define _XTAL_FREQ  64000000

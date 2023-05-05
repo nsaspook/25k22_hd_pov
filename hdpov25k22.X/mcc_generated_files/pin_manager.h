@@ -14,7 +14,7 @@
     This header file provides implementations for pin APIs for all pins selected in the GUI.
     Generation Information :
         Product Revision  :  MPLAB(c) Code Configurator - 4.85.1
-        Device            :  PIC18F45K22
+        Device            :  PIC18F46K22
         Version           :  1.01
     The generated drivers are tested against the following:
         Compiler          :  XC8 1.35
