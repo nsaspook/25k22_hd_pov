@@ -97,7 +97,7 @@ struct V_data V = {
 struct ringBufS_t ring_buf1;
 
 const char build_date[] = __DATE__, build_time[] = __TIME__, versions[] = "2.00";
-const uint16_t TIMEROFFSET = 18000, TIMERDEF = 60000;
+// const uint16_t TIMEROFFSET = 18000, TIMERDEF = 60000;
 
 void uitoa(uint8_t * Buffer, uint16_t Value)
 {
@@ -110,7 +110,7 @@ void uitoa(uint8_t * Buffer, uint16_t Value)
 		for (i = 0, Divisor = 10000; i < 5u; i++) {
 			Digit = Value / Divisor;
 			if (Digit || Printed) {
-				*Buffer++ = '0' + Digit;
+				*Buffer++ = '0' + (uint8_t) Digit;
 				Value -= Digit*Divisor;
 				Printed = true;
 			}
@@ -428,7 +428,7 @@ uint8_t init_hov_params(void)
 	S.s1 = z_offset - s_count;
 	S.s2 = z_offset - s_count * 2;
 	S.s3 = z_offset - s_count * 3;
-	S.zero_frac = (65534.0 - (float) S.zero_offset) / 33300.0;
+	S.zero_frac = (float) (65534.0f - (float) S.zero_offset) / 33300.0f;
 	return 0;
 }
 
