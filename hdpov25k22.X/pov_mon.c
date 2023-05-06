@@ -96,7 +96,8 @@ struct V_data V = {
 /* RS232 command buffer */
 struct ringBufS_t ring_buf1;
 
-const char build_date[] = __DATE__, build_time[] = __TIME__, versions[] = "K45";
+const char build_date[] = __DATE__, build_time[] = __TIME__, versions[] = "K46";
+const uint16_t serial = 1;
 // const uint16_t TIMEROFFSET = 18000, TIMERDEF = 60000;
 
 void uitoa(uint8_t * Buffer, uint16_t Value)
@@ -206,7 +207,7 @@ int16_t sw_work(void)
 		V.rpm_update = false;
 	}
 
-	if (!SW1) {
+	if (!SW1 && V.rpm_counts) {
 		USART_putsr("\r\n RPM counts,");
 		uitoa(V.str, V.rpm_counts);
 		USART_puts(V.str);
@@ -214,6 +215,7 @@ int16_t sw_work(void)
 		USART_putsr(" strobe,");
 		uitoa(V.str, L_ptr->strobe);
 		USART_puts(V.str);
+		V.rpm_counts = 0;
 	}
 
 	switch (V.s_state) {
@@ -389,8 +391,9 @@ void init_povmon(void)
 	 * check for a clean POR
 	 */
 	V.boot_code = false;
-	if (RCON != 0b0011100)
+	if (RCON != 0b10011100) {
 		V.boot_code = true;
+	}
 
 	if (STKPTRbits.STKFUL || STKPTRbits.STKUNF) {
 		V.boot_code = true;
@@ -407,17 +410,21 @@ void init_povmon(void)
 uint8_t init_hov_params(void)
 {
 
-	USART_putsr("\r\nVersion ");
+	USART_putsr("\r\n\r\nVersion ");
 	USART_putsr(versions);
 	USART_putsr(", ");
-	//	itoa(V.str, sizeof(L[0]), 10);
+	uitoa(V.str, serial);
 	USART_puts(V.str);
 	USART_putsr(", ");
 	USART_putsr(build_date);
 	USART_putsr(", ");
 	USART_putsr(build_time);
-	if (V.boot_code)
-		USART_putsr(", dirty boot");
+	if (V.boot_code) {
+		USART_putsr(", ");
+		uitoa(V.str, RCON);
+		USART_puts(V.str);
+		USART_putsr(", dirty boot\r\n");
+	}
 
 	L_ptr = &L0[0];
 	L_ptr_next = &L1[0];
